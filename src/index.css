@@ -46,8 +46,8 @@ html[data-theme="dark"] {
   --border: #232833;
   --border-strong: #343b49;
 
-  --accent: #4f8cff;
-  --accent-soft: rgba(79, 140, 255, 0.12);
+  --accent: #ef4444;
+  --accent-soft: rgba(239, 68, 68, 0.12);
 
   --cyan: #48d7ff;
   --cyan-soft: rgba(72, 215, 255, 0.11);
@@ -57,17 +57,13 @@ html[data-theme="dark"] {
 
   --glass: rgba(16, 18, 24, 0.76);
 
-  --shadow-soft:
-    0 28px 80px rgba(0, 0, 0, 0.3);
+  --shadow-soft: 0 28px 80px rgba(0, 0, 0, 0.3);
 
-  --shadow-card:
-    0 14px 42px rgba(0, 0, 0, 0.2);
+  --shadow-card: 0 14px 42px rgba(0, 0, 0, 0.2);
 
-  --shadow-navigation:
-    0 18px 55px rgba(0, 0, 0, 0.34);
+  --shadow-navigation: 0 18px 55px rgba(0, 0, 0, 0.34);
 
-  --grid-line:
-    rgba(255, 255, 255, 0.032);
+  --grid-line: rgba(255, 255, 255, 0.032);
 
   --hero-image-opacity: 0.88;
 }
@@ -99,17 +95,13 @@ html[data-theme="light"] {
 
   --glass: rgba(255, 255, 255, 0.82);
 
-  --shadow-soft:
-    0 28px 80px rgba(38, 48, 70, 0.09);
+  --shadow-soft: 0 28px 80px rgba(38, 48, 70, 0.09);
 
-  --shadow-card:
-    0 14px 42px rgba(38, 48, 70, 0.075);
+  --shadow-card: 0 14px 42px rgba(38, 48, 70, 0.075);
 
-  --shadow-navigation:
-    0 18px 55px rgba(38, 48, 70, 0.14);
+  --shadow-navigation: 0 18px 55px rgba(38, 48, 70, 0.14);
 
-  --grid-line:
-    rgba(17, 20, 26, 0.042);
+  --grid-line: rgba(17, 20, 26, 0.042);
 
   --hero-image-opacity: 0.68;
 }
@@ -200,16 +192,6 @@ h2,
 h3,
 h4,
 h5,
-h6,
-p {
-  margin: 0;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
 h6 {
   font-family: "Space Grotesk", sans-serif;
 }
@@ -238,9 +220,7 @@ a:focus:not(:focus-visible) {
 
 * {
   scrollbar-width: thin;
-  scrollbar-color:
-    var(--border-strong)
-    var(--background);
+  scrollbar-color: var(--border-strong) var(--background);
 }
 
 ::-webkit-scrollbar {
@@ -320,65 +300,44 @@ a:focus:not(:focus-visible) {
 @layer utilities {
   .technical-grid {
     background-image:
-      linear-gradient(
-        var(--grid-line) 1px,
-        transparent 1px
-      ),
-      linear-gradient(
-        90deg,
-        var(--grid-line) 1px,
-        transparent 1px
-      );
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
 
     background-size: 48px 48px;
   }
 
   .technical-grid-dense {
     background-image:
-      linear-gradient(
-        var(--grid-line) 1px,
-        transparent 1px
-      ),
-      linear-gradient(
-        90deg,
-        var(--grid-line) 1px,
-        transparent 1px
-      );
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
 
     background-size: 28px 28px;
   }
 
   .grid-fade {
-    mask-image:
-      linear-gradient(
-        to bottom,
-        transparent,
-        black 14%,
-        black 82%,
-        transparent
-      );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent,
+      black 14%,
+      black 82%,
+      transparent
+    );
 
-    -webkit-mask-image:
-      linear-gradient(
-        to bottom,
-        transparent,
-        black 14%,
-        black 82%,
-        transparent
-      );
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent,
+      black 14%,
+      black 82%,
+      transparent
+    );
   }
 
   .text-gradient-blue {
-    background:
-      linear-gradient(
-        105deg,
-        var(--accent) 0%,
-        var(--cyan) 92%
-      );
+    background: linear-gradient(105deg, #ef4444 25%, #f97316 100%);
 
     background-clip: text;
     -webkit-background-clip: text;
-
+    -webkit-text-fill-color: transparent;
     color: transparent;
   }
 
@@ -389,8 +348,7 @@ a:focus:not(:focus-visible) {
   }
 
   .cyan-glow {
-    box-shadow:
-      0 0 42px var(--cyan-soft);
+    box-shadow: 0 0 42px var(--cyan-soft);
   }
 
   .text-balance {
@@ -440,11 +398,7 @@ a:focus:not(:focus-visible) {
 }
 
 .floating-navigation {
-  bottom:
-    max(
-      12px,
-      env(safe-area-inset-bottom)
-    );
+  bottom: max(12px, env(safe-area-inset-bottom));
 }
 
 .floating-navigation .glass-panel {
@@ -452,13 +406,7 @@ a:focus:not(:focus-visible) {
 }
 
 .scroll-progress-button {
-  bottom:
-    calc(
-      max(
-        12px,
-        env(safe-area-inset-bottom)
-      ) + 74px
-    );
+  bottom: calc(max(12px, env(safe-area-inset-bottom)) + 74px);
 }
 
 section[id] {
@@ -517,13 +465,7 @@ html[data-theme="light"] .glass-panel {
 
   a,
   button {
-    transition-timing-function:
-      cubic-bezier(
-        0.22,
-        1,
-        0.36,
-        1
-      );
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   }
 }
 
@@ -558,11 +500,7 @@ html[data-theme="light"] .glass-panel {
   }
 
   .section-heading {
-    font-size: clamp(
-      2.45rem,
-      12vw,
-      3.8rem
-    );
+    font-size: clamp(2.45rem, 12vw, 3.8rem);
 
     line-height: 0.93;
     letter-spacing: -0.047em;
@@ -609,11 +547,7 @@ html[data-theme="light"] .glass-panel {
   }
 
   .section-heading {
-    font-size: clamp(
-      2.25rem,
-      12vw,
-      3.2rem
-    );
+    font-size: clamp(2.25rem, 12vw, 3.2rem);
   }
 
   .floating-navigation {
