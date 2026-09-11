@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 
 import {
-  ArrowDown,
   ArrowRight,
   Braces,
   CheckCircle2,
@@ -97,15 +96,17 @@ const philosophySteps = [
 const revealVariants = {
   hidden: {
     opacity: 0,
-    y: 24,
+    y: 26,
+    filter: "blur(7px)",
   },
 
   visible: {
     opacity: 1,
     y: 0,
+    filter: "blur(0px)",
 
     transition: {
-      duration: 0.55,
+      duration: 0.58,
       ease: [0.22, 1, 0.36, 1],
     },
   },
@@ -123,19 +124,7 @@ function HowIBuild() {
         aria-hidden="true"
       />
 
-      <div
-        className="pointer-events-none absolute left-[18%] top-16 size-[520px] rounded-full bg-accent/[0.04] blur-[160px]"
-        aria-hidden="true"
-      />
-
-      <div
-        className="pointer-events-none absolute right-[5%] bottom-20 size-[500px] rounded-full bg-cyan/[0.04] blur-[150px]"
-        aria-hidden="true"
-      />
-
       <div className="site-container relative">
-        {/* HEADER */}
-
         <motion.div
           initial={{
             opacity: 0,
@@ -151,7 +140,6 @@ function HowIBuild() {
           }}
           transition={{
             duration: 0.55,
-            ease: [0.22, 1, 0.36, 1],
           }}
           className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.6fr)] lg:items-end"
         >
@@ -186,8 +174,6 @@ function HowIBuild() {
           </p>
         </motion.div>
 
-        {/* ARCHITECTURE */}
-
         <motion.div
           variants={revealVariants}
           initial="hidden"
@@ -216,10 +202,31 @@ function HowIBuild() {
           </div>
 
           <div className="p-5 sm:p-7 lg:p-9">
-            <div className="grid gap-3 md:grid-cols-4 xl:grid-cols-8">
+            <div className="relative grid gap-3 md:grid-cols-4 xl:grid-cols-8">
+              <motion.div
+                initial={{
+                  scaleX: 0,
+                }}
+                whileInView={{
+                  scaleX: 1,
+                }}
+                viewport={{
+                  once: true,
+                }}
+                transition={{
+                  duration: 1.2,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="absolute left-[5%] right-[5%] top-1/2 hidden h-px origin-left bg-gradient-to-r from-accent/20 via-accent to-cyan/20 xl:block"
+                aria-hidden="true"
+              />
+
               {architectureSteps.map((step, index) => {
                 const Icon = step.icon;
-                const highlight = index === 4 || index === 5 || index === 6;
+                const highlight =
+                  index === 4 ||
+                  index === 5 ||
+                  index === 6;
 
                 return (
                   <motion.div
@@ -227,23 +234,29 @@ function HowIBuild() {
                     initial={{
                       opacity: 0,
                       y: 14,
+                      scale: 0.96,
                     }}
                     whileInView={{
                       opacity: 1,
                       y: 0,
+                      scale: 1,
                     }}
                     viewport={{
                       once: true,
                     }}
                     transition={{
                       duration: 0.35,
-                      delay: index * 0.05,
+                      delay: index * 0.06,
+                    }}
+                    whileHover={{
+                      y: -5,
+                      scale: 1.015,
                     }}
                     className={[
-                      "group relative min-h-[155px] rounded-2xl border p-4 transition-all duration-200 hover:-translate-y-1",
+                      "group relative z-10 min-h-[155px] rounded-2xl border p-4",
                       highlight
                         ? "border-accent/25 bg-accent-soft"
-                        : "border-border bg-surface-alt/55",
+                        : "border-border bg-surface-alt/95",
                     ].join(" ")}
                   >
                     <div className="flex items-center justify-between">
@@ -273,14 +286,6 @@ function HowIBuild() {
                     <p className="mt-8 font-heading text-base font-semibold text-text-primary">
                       {step.title}
                     </p>
-
-                    {index < architectureSteps.length - 1 && (
-                      <ArrowRight
-                        size={13}
-                        className="absolute -right-2.5 top-1/2 z-10 hidden -translate-y-1/2 text-border-strong xl:block"
-                        aria-hidden="true"
-                      />
-                    )}
                   </motion.div>
                 );
               })}
@@ -328,11 +333,7 @@ function HowIBuild() {
           </div>
         </motion.div>
 
-        {/* JOURNEY + PHILOSOPHY */}
-
         <div className="mt-5 grid gap-5 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
-          {/* Career Journey */}
-
           <motion.div
             variants={revealVariants}
             initial="hidden"
@@ -363,8 +364,21 @@ function HowIBuild() {
 
             <div className="p-6 sm:p-7">
               <div className="relative">
-                <div
-                  className="absolute bottom-8 left-[18px] top-8 w-px bg-border"
+                <motion.div
+                  initial={{
+                    scaleY: 0,
+                  }}
+                  whileInView={{
+                    scaleY: 1,
+                  }}
+                  viewport={{
+                    once: true,
+                  }}
+                  transition={{
+                    duration: 0.9,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                  className="absolute bottom-8 left-[18px] top-8 w-px origin-top bg-gradient-to-b from-accent via-cyan to-border"
                   aria-hidden="true"
                 />
 
@@ -400,7 +414,12 @@ function HowIBuild() {
                         0{index + 1}
                       </div>
 
-                      <div className="rounded-2xl border border-border bg-surface-alt/50 p-4">
+                      <motion.div
+                        whileHover={{
+                          x: 4,
+                        }}
+                        className="rounded-2xl border border-border bg-surface-alt/50 p-4"
+                      >
                         <span className="font-code text-[8px] uppercase tracking-[0.12em] text-text-muted">
                           {step.year}
                         </span>
@@ -412,15 +431,13 @@ function HowIBuild() {
                         <p className="mt-2 text-sm leading-6 text-text-secondary">
                           {step.description}
                         </p>
-                      </div>
+                      </motion.div>
                     </motion.div>
                   ))}
                 </div>
               </div>
             </div>
           </motion.div>
-
-          {/* Code / Philosophy */}
 
           <motion.div
             variants={revealVariants}
@@ -474,8 +491,23 @@ function HowIBuild() {
 
                 <div className="mt-5 space-y-2.5">
                   {philosophySteps.map((item, index) => (
-                    <div
+                    <motion.div
                       key={item}
+                      initial={{
+                        opacity: 0,
+                        x: 8,
+                      }}
+                      whileInView={{
+                        opacity: 1,
+                        x: 0,
+                      }}
+                      viewport={{
+                        once: true,
+                      }}
+                      transition={{
+                        duration: 0.3,
+                        delay: index * 0.04,
+                      }}
                       className="flex items-start gap-3"
                     >
                       <span
@@ -492,15 +524,13 @@ function HowIBuild() {
                       <p className="pt-0.5 text-xs leading-5 text-text-secondary">
                         {item}
                       </p>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
               </div>
             </div>
           </motion.div>
         </div>
-
-        {/* FINAL STATEMENT */}
 
         <motion.div
           initial={{
@@ -621,7 +651,12 @@ function CodePreview() {
   ];
 
   return (
-    <div className="mt-6 overflow-hidden rounded-2xl border border-border bg-background/65">
+    <motion.div
+      whileHover={{
+        y: -3,
+      }}
+      className="mt-6 overflow-hidden rounded-2xl border border-border bg-background/65"
+    >
       <div className="flex items-center justify-between border-b border-border px-4 py-3">
         <div className="flex items-center gap-2">
           <Braces
@@ -642,9 +677,24 @@ function CodePreview() {
 
       <div className="overflow-x-auto px-4 py-4">
         <pre className="min-w-[520px]">
-          {lines.map((line) => (
-            <div
+          {lines.map((line, index) => (
+            <motion.div
               key={`${line.number}-${line.content}`}
+              initial={{
+                opacity: 0,
+                x: -6,
+              }}
+              whileInView={{
+                opacity: 1,
+                x: 0,
+              }}
+              viewport={{
+                once: true,
+              }}
+              transition={{
+                duration: 0.22,
+                delay: index * 0.025,
+              }}
               className="grid grid-cols-[30px_minmax(0,1fr)] font-code text-[9px] leading-6"
             >
               <span className="select-none text-text-muted/50">
@@ -654,11 +704,11 @@ function CodePreview() {
               <code className={getCodeColour(line.type)}>
                 {line.content || " "}
               </code>
-            </div>
+            </motion.div>
           ))}
         </pre>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

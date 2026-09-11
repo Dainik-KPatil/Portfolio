@@ -8,32 +8,38 @@ import {
   Send,
 } from "lucide-react";
 
+import profile from "../data/profile.js";
+
 const contactLinks = [
   {
     label: "GitHub",
-    description: "Repositories, experiments and development work.",
-    href: "https://github.com/dainikpatil-dev",
+    description:
+      "Repositories, experiments and development work.",
+    href: profile.github,
     icon: Star,
     external: true,
   },
   {
     label: "LinkedIn",
-    description: "Professional profile and career updates.",
-    href: "https://www.linkedin.com/in/dainik-patil-119083294/",
+    description:
+      "Professional profile and career updates.",
+    href: profile.linkedin,
     icon: Star,
     external: true,
   },
   {
     label: "Email",
-    description: "For opportunities, projects and technical discussions.",
-    href: "mailto:dainikpatil1533@gmail.com",
+    description:
+      "For opportunities, projects and technical discussions.",
+    href: `mailto:${profile.email}`,
     icon: Mail,
     external: false,
   },
   {
     label: "Resume",
-    description: "View my professional experience and technical background.",
-    href: "/resume.pdf",
+    description:
+      "View my professional experience and technical background.",
+    href: profile.resume,
     icon: FileText,
     external: true,
   },
@@ -108,23 +114,22 @@ function MoreContact() {
               <br />
 
               <span className="text-gradient-blue">
-                LET'S BUILD SOMETHING USEFUL.
+                LET&apos;S BUILD SOMETHING USEFUL.
               </span>
             </h2>
           </div>
 
           <div className="lg:pb-1">
             <p className="section-copy max-w-xl">
-              I’m open to development opportunities, technical collaborations
-              and meaningful projects where strong backend thinking and clean
+              I&apos;m open to development opportunities,
+              technical collaborations and meaningful projects
+              where strong backend thinking and clean
               implementation matter.
             </p>
           </div>
         </motion.div>
 
         <div className="mt-14 grid gap-5 xl:grid-cols-[minmax(0,1.18fr)_minmax(330px,0.82fr)]">
-          {/* LINKS */}
-
           <motion.div
             initial={{
               opacity: 0,
@@ -145,7 +150,10 @@ function MoreContact() {
           >
             <div className="flex items-center justify-between border-b border-border px-5 py-4 sm:px-7">
               <div className="flex items-center gap-3">
-                <span className="size-2 rounded-full bg-success" />
+                <span
+                  className="size-2 rounded-full bg-success"
+                  aria-hidden="true"
+                />
 
                 <span className="technical-label">
                   Available channels
@@ -158,17 +166,17 @@ function MoreContact() {
             </div>
 
             <div>
-              {contactLinks.map((link, index) => (
-                <ContactLink
-                  key={link.label}
-                  link={link}
-                  index={index}
-                />
-              ))}
+              {contactLinks.map(
+                (link, index) => (
+                  <ContactLink
+                    key={link.label}
+                    link={link}
+                    index={index}
+                  />
+                ),
+              )}
             </div>
           </motion.div>
-
-          {/* CONTACT UI */}
 
           <motion.aside
             initial={{
@@ -190,7 +198,10 @@ function MoreContact() {
             className="glass-panel overflow-hidden rounded-[28px]"
           >
             <div className="flex items-center justify-between border-b border-border px-5 py-4 sm:px-6">
-              <div className="flex items-center gap-2">
+              <div
+                className="flex items-center gap-2"
+                aria-hidden="true"
+              >
                 <span className="size-2 rounded-full bg-[#ff6b6b]" />
                 <span className="size-2 rounded-full bg-warm" />
                 <span className="size-2 rounded-full bg-success" />
@@ -230,11 +241,12 @@ function MoreContact() {
                   <div className="flex items-center gap-3">
                     <span className="relative flex size-2">
                       <span className="absolute inline-flex size-full animate-ping rounded-full bg-success opacity-30" />
+
                       <span className="relative inline-flex size-2 rounded-full bg-success" />
                     </span>
 
                     <span className="text-sm font-medium text-text-primary">
-                      Open to opportunities
+                      {profile.availability}
                     </span>
                   </div>
 
@@ -266,7 +278,7 @@ function MoreContact() {
               </div>
 
               <a
-                href="mailto:your-email@example.com"
+                href={`mailto:${profile.email}`}
                 className="primary-button group mt-7 w-full"
               >
                 Send Email
@@ -280,8 +292,6 @@ function MoreContact() {
             </div>
           </motion.aside>
         </div>
-
-        {/* SMALL CLOSING STRIP */}
 
         <motion.div
           initial={{
@@ -322,7 +332,7 @@ function ContactLink({
   const externalProps = link.external
     ? {
         target: "_blank",
-        rel: "noreferrer",
+        rel: "noopener noreferrer",
       }
     : {};
 
@@ -345,6 +355,14 @@ function ContactLink({
         duration: 0.35,
         delay: index * 0.05,
       }}
+      whileHover={{
+        x: 4,
+      }}
+      aria-label={
+        link.external
+          ? `Open ${link.label} in a new tab`
+          : link.label
+      }
       className="group grid min-h-[145px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-5 border-b border-border px-5 py-6 transition-colors duration-200 last:border-b-0 hover:bg-surface-hover sm:px-7"
     >
       <div className="flex size-11 items-center justify-center rounded-2xl border border-border bg-surface-alt text-text-muted transition-all duration-200 group-hover:border-accent/25 group-hover:bg-accent-soft group-hover:text-accent">
@@ -373,8 +391,8 @@ function ContactLink({
 
       <ArrowUpRight
         size={18}
-        className="text-text-muted transition-all duration-200 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-accent"
         aria-hidden="true"
+        className="text-text-muted transition-all duration-200 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-accent"
       />
     </motion.a>
   );

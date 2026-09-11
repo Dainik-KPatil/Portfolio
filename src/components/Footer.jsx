@@ -1,29 +1,34 @@
 import {
   ArrowUpRight,
-  Star,
   Mail,
 } from "lucide-react";
+
+import profile from "../data/profile.js";
 
 const footerLinks = [
   {
     label: "GitHub",
-    href: "https://github.com/your-username",
-    icon: Star,
+    href: profile.github,
+    icon: Mail,
+    external: true,
   },
   {
     label: "LinkedIn",
-    href: "https://www.linkedin.com/in/your-profile",
-    icon: Star,
+    href: profile.linkedin,
+    icon: Mail,
+    external: true,
   },
   {
     label: "Email",
-    href: "mailto:your-email@example.com",
+    href: `mailto:${profile.email}`,
     icon: Mail,
+    external: false,
   },
 ];
 
 function Footer() {
-  const currentYear = new Date().getFullYear();
+  const currentYear =
+    new Date().getFullYear();
 
   return (
     <footer className="relative border-t border-border bg-background pb-28 pt-10 sm:pb-32 sm:pt-12 lg:pb-28">
@@ -49,8 +54,7 @@ function Footer() {
             </p>
 
             <p className="mt-5 max-w-lg text-sm leading-6 text-text-secondary">
-              Backend-first development focused on real business systems,
-              application logic, APIs and complete feature delivery.
+              {profile.footerSummary}
             </p>
           </div>
 
@@ -62,8 +66,21 @@ function Footer() {
                 <a
                   key={link.label}
                   href={link.href}
-                  target={link.label !== "Email" ? "_blank" : undefined}
-                  rel={link.label !== "Email" ? "noreferrer" : undefined}
+                  target={
+                    link.external
+                      ? "_blank"
+                      : undefined
+                  }
+                  rel={
+                    link.external
+                      ? "noopener noreferrer"
+                      : undefined
+                  }
+                  aria-label={
+                    link.external
+                      ? `Open ${link.label} in a new tab`
+                      : `Contact ${profile.name} by email`
+                  }
                   className="group inline-flex min-h-11 items-center gap-2 rounded-full border border-border bg-surface px-4 text-text-secondary transition-all duration-200 hover:-translate-y-0.5 hover:border-border-strong hover:bg-surface-hover hover:text-accent"
                 >
                   <Icon
@@ -78,8 +95,8 @@ function Footer() {
 
                   <ArrowUpRight
                     size={12}
-                    className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                     aria-hidden="true"
+                    className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                   />
                 </a>
               );
@@ -89,16 +106,8 @@ function Footer() {
 
         <div className="mt-10 flex flex-col gap-3 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between">
           <p className="font-code text-[8px] uppercase tracking-[0.13em] text-text-muted">
-            © {currentYear} Dainik Kishor Patil
+            © {currentYear} {profile.name}
           </p>
-
-          <div className="flex items-center gap-3">
-            <span className="size-1.5 rounded-full bg-success" />
-
-            <p className="font-code text-[8px] uppercase tracking-[0.13em] text-text-muted">
-              Built with React + Vite
-            </p>
-          </div>
         </div>
       </div>
     </footer>

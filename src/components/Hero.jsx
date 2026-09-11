@@ -59,7 +59,8 @@ const containerVariants = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.08,
+      staggerChildren: 0.09,
+      delayChildren: 0.08,
     },
   },
 };
@@ -67,15 +68,16 @@ const containerVariants = {
 const revealVariants = {
   hidden: {
     opacity: 0,
-    y: 24,
+    y: 30,
+    filter: "blur(8px)",
   },
 
   visible: {
     opacity: 1,
     y: 0,
-
+    filter: "blur(0px)",
     transition: {
-      duration: 0.58,
+      duration: 0.65,
       ease: [0.22, 1, 0.36, 1],
     },
   },
@@ -92,11 +94,6 @@ function Hero() {
 
       <div className="site-container relative z-10">
         <div className="grid min-h-screen items-center gap-14 pb-32 pt-20 lg:grid-cols-[minmax(0,1.05fr)_minmax(440px,0.8fr)] lg:gap-16 lg:pb-28 lg:pt-16 xl:gap-24">
-
-          {/* =====================================================
-              LEFT
-          ====================================================== */}
-
           <motion.div
             variants={containerVariants}
             initial="hidden"
@@ -109,7 +106,6 @@ function Hero() {
             >
               <span className="relative flex size-2">
                 <span className="absolute inline-flex size-full animate-ping rounded-full bg-success opacity-35" />
-
                 <span className="relative inline-flex size-2 rounded-full bg-success" />
               </span>
 
@@ -122,7 +118,15 @@ function Hero() {
               variants={revealVariants}
               className="mt-8 flex items-center gap-3"
             >
-              <span className="h-px w-8 bg-accent" />
+              <motion.span
+                initial={{ width: 0 }}
+                animate={{ width: 32 }}
+                transition={{
+                  duration: 0.55,
+                  delay: 0.45,
+                }}
+                className="h-px bg-accent"
+              />
 
               <p className="font-code text-[10px] font-semibold uppercase tracking-[0.2em] text-accent sm:text-xs">
                 PHP / Laravel / Full Stack
@@ -160,7 +164,14 @@ function Hero() {
               variants={revealVariants}
               className="mt-9 flex flex-col gap-3 xs:flex-row"
             >
-              <a
+              <motion.a
+                whileHover={{
+                  y: -2,
+                  scale: 1.01,
+                }}
+                whileTap={{
+                  scale: 0.98,
+                }}
                 href="#work"
                 className="primary-button group"
               >
@@ -171,9 +182,16 @@ function Hero() {
                   aria-hidden="true"
                   className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:translate-y-0.5"
                 />
-              </a>
+              </motion.a>
 
-              <a
+              <motion.a
+                whileHover={{
+                  y: -2,
+                  scale: 1.01,
+                }}
+                whileTap={{
+                  scale: 0.98,
+                }}
                 href="/resume.pdf"
                 target="_blank"
                 rel="noreferrer"
@@ -186,7 +204,7 @@ function Hero() {
                   aria-hidden="true"
                   className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                 />
-              </a>
+              </motion.a>
             </motion.div>
 
             <motion.div
@@ -194,9 +212,21 @@ function Hero() {
               className="mt-11 flex flex-wrap gap-x-6 gap-y-3 border-t border-border pt-5"
             >
               {heroHighlights.map(
-                (item) => (
-                  <div
+                (item, index) => (
+                  <motion.div
                     key={item}
+                    initial={{
+                      opacity: 0,
+                      y: 8,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      y: 0,
+                    }}
+                    transition={{
+                      duration: 0.35,
+                      delay: 0.7 + index * 0.05,
+                    }}
                     className="flex items-center gap-2"
                   >
                     <span className="size-1.5 rounded-full bg-accent" />
@@ -204,31 +234,32 @@ function Hero() {
                     <span className="font-code text-[9px] font-medium uppercase tracking-[0.12em] text-text-secondary sm:text-[10px]">
                       {item}
                     </span>
-                  </div>
+                  </motion.div>
                 ),
               )}
             </motion.div>
           </motion.div>
 
-          {/* =====================================================
-              RIGHT LIVE VISUAL
-          ====================================================== */}
-
           <motion.div
             initial={{
               opacity: 0,
-              y: 30,
-              scale: 0.98,
+              y: 35,
+              scale: 0.96,
+              filter: "blur(10px)",
             }}
             animate={{
               opacity: 1,
               y: 0,
               scale: 1,
+              filter: "blur(0px)",
             }}
             transition={{
-              duration: 0.8,
-              delay: 0.2,
+              duration: 0.85,
+              delay: 0.18,
               ease: [0.22, 1, 0.36, 1],
+            }}
+            whileHover={{
+              y: -4,
             }}
             className="relative mx-auto w-full max-w-[590px] lg:mx-0 lg:ml-auto"
           >
@@ -245,7 +276,7 @@ function Hero() {
               }}
               transition={{
                 duration: 0.55,
-                delay: 0.8,
+                delay: 0.9,
               }}
               className="glass-panel absolute -bottom-5 right-5 hidden rounded-2xl px-4 py-3 sm:block xl:-right-8"
             >
@@ -258,7 +289,6 @@ function Hero() {
               </p>
             </motion.div>
           </motion.div>
-
         </div>
       </div>
 
@@ -275,11 +305,21 @@ function Hero() {
             >
               Explore portfolio
 
-              <ArrowDownRight
-                size={13}
-                aria-hidden="true"
-                className="transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5"
-              />
+              <motion.span
+                animate={{
+                  y: [0, 3, 0],
+                }}
+                transition={{
+                  duration: 1.8,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
+                <ArrowDownRight
+                  size={13}
+                  aria-hidden="true"
+                />
+              </motion.span>
             </a>
           </div>
         </div>
@@ -287,10 +327,6 @@ function Hero() {
     </section>
   );
 }
-
-/* =========================================================
-   BACKGROUND
-========================================================= */
 
 function HeroBackground() {
   return (
@@ -300,7 +336,19 @@ function HeroBackground() {
     >
       <div className="absolute inset-0 bg-background" />
 
-      <div className="hero-visual-image absolute inset-0 opacity-100" />
+      <motion.div
+        animate={{
+          scale: [1, 1.025, 1],
+          x: [0, 10, 0],
+          y: [0, -6, 0],
+        }}
+        transition={{
+          duration: 14,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="hero-visual-image absolute -inset-10 opacity-100"
+      />
 
       <div className="technical-grid absolute inset-0 opacity-[0.35]" />
 
@@ -308,16 +356,34 @@ function HeroBackground() {
 
       <div className="absolute inset-x-0 bottom-0 h-[35%] bg-gradient-to-t from-background to-transparent" />
 
-      <div className="absolute -left-32 top-[18%] size-[460px] rounded-full bg-accent/[0.08] blur-[130px]" />
+      <motion.div
+        animate={{
+          x: [0, 22, 0],
+          y: [0, -12, 0],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="absolute -left-32 top-[18%] size-[460px] rounded-full bg-accent/[0.08] blur-[130px]"
+      />
 
-      <div className="absolute right-[4%] top-[18%] size-[380px] rounded-full bg-cyan/[0.07] blur-[120px]" />
+      <motion.div
+        animate={{
+          x: [0, -18, 0],
+          y: [0, 10, 0],
+        }}
+        transition={{
+          duration: 12,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="absolute right-[4%] top-[18%] size-[380px] rounded-full bg-cyan/[0.07] blur-[120px]"
+      />
     </div>
   );
 }
-
-/* =========================================================
-   LIVE DEVELOPER PANEL
-========================================================= */
 
 function LiveDeveloperPanel() {
   const [activeStep, setActiveStep] =
@@ -327,25 +393,16 @@ function LiveDeveloperPanel() {
     useState(1);
 
   useEffect(() => {
-    const interval = window.setInterval(
-      () => {
-        setActiveStep((current) => {
-          if (
-            current ===
-            flowSteps.length - 1
-          ) {
-            setRequestCount(
-              (count) => count + 1,
-            );
+    const interval = window.setInterval(() => {
+      setActiveStep((current) => {
+        if (current === flowSteps.length - 1) {
+          setRequestCount((count) => count + 1);
+          return 0;
+        }
 
-            return 0;
-          }
-
-          return current + 1;
-        });
-      },
-      950,
-    );
+        return current + 1;
+      });
+    }, 950);
 
     return () => {
       window.clearInterval(interval);
@@ -357,15 +414,20 @@ function LiveDeveloperPanel() {
 
   return (
     <div className="relative">
-      <div
-        className="absolute -inset-px rounded-[29px] bg-gradient-to-br from-accent/30 via-cyan/10 to-transparent opacity-70"
+      <motion.div
+        animate={{
+          opacity: [0.5, 0.8, 0.5],
+        }}
+        transition={{
+          duration: 3,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="absolute -inset-px rounded-[29px] bg-gradient-to-br from-accent/30 via-cyan/10 to-transparent"
         aria-hidden="true"
       />
 
       <div className="glass-panel relative overflow-hidden rounded-[28px]">
-
-        {/* Window header */}
-
         <div className="flex items-center justify-between border-b border-border px-5 py-4 sm:px-6">
           <div className="flex items-center gap-2">
             <span className="size-2 rounded-full bg-[#FF6B6B]" />
@@ -386,11 +448,8 @@ function LiveDeveloperPanel() {
           </div>
         </div>
 
-        {/* Endpoint */}
-
         <div className="border-b border-border bg-surface-alt/40 px-5 py-4 sm:px-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
-
             <div className="flex min-w-0 items-center gap-3">
               <span className="rounded-md bg-success/10 px-2 py-1 font-code text-[8px] font-semibold text-success">
                 POST
@@ -402,20 +461,13 @@ function LiveDeveloperPanel() {
             </div>
 
             <span className="font-code text-[8px] text-text-muted">
-              req_{String(
-                requestCount,
-              ).padStart(3, "0")}
+              req_{String(requestCount).padStart(3, "0")}
             </span>
-
           </div>
         </div>
 
         <div className="grid md:grid-cols-[1fr_170px]">
-
-          {/* Pipeline */}
-
           <div className="p-5 sm:p-6">
-
             <div className="flex items-center justify-between">
               <div>
                 <p className="technical-label">
@@ -436,7 +488,6 @@ function LiveDeveloperPanel() {
             </div>
 
             <div className="relative mt-7">
-
               <div
                 className="absolute bottom-5 left-[15px] top-5 w-px bg-border"
                 aria-hidden="true"
@@ -449,58 +500,44 @@ function LiveDeveloperPanel() {
                       key={step.label}
                       step={step}
                       index={index}
-                      activeStep={
-                        activeStep
-                      }
+                      activeStep={activeStep}
                     />
                   ),
                 )}
               </div>
-
             </div>
-
           </div>
 
-          {/* Status UI */}
-
           <div className="border-t border-border bg-surface-alt/35 p-5 md:border-l md:border-t-0">
-
             <p className="technical-label">
               Runtime
             </p>
 
             <div className="mt-5 space-y-5">
-
               <RuntimeMetric
                 label="Status"
                 value={
-                  activeStep ===
-                  flowSteps.length - 1
+                  activeStep === flowSteps.length - 1
                     ? "200 OK"
                     : "PROCESS"
                 }
                 success={
-                  activeStep ===
-                  flowSteps.length - 1
+                  activeStep === flowSteps.length - 1
                 }
               />
 
               <RuntimeMetric
                 label="Layer"
-                value={
-                  currentStep.label
-                }
+                value={currentStep.label}
               />
 
               <RuntimeMetric
                 label="Stack"
                 value="Laravel"
               />
-
             </div>
 
             <div className="mt-7 border-t border-border pt-5">
-
               <p className="technical-label">
                 Progress
               </p>
@@ -523,31 +560,21 @@ function LiveDeveloperPanel() {
               </div>
 
               <p className="mt-3 font-code text-[8px] text-text-muted">
-                {activeStep + 1}/
-                {flowSteps.length}
+                {activeStep + 1}/{flowSteps.length}
               </p>
-
             </div>
-
           </div>
-
         </div>
 
-        {/* Console */}
-
         <div className="border-t border-border bg-background/60 px-5 py-4 sm:px-6">
-
           <div className="flex items-center gap-2">
-
             <span className="font-code text-[9px] text-accent">
               &gt;
             </span>
 
             <AnimatePresence mode="wait">
               <motion.p
-                key={
-                  currentStep.label
-                }
+                key={currentStep.label}
                 initial={{
                   opacity: 0,
                   y: 4,
@@ -565,16 +592,11 @@ function LiveDeveloperPanel() {
                 }}
                 className="font-code text-[8px] text-text-secondary sm:text-[9px]"
               >
-                processing{" "}
-                {currentStep.label.toLowerCase()}
-                ...
+                processing {currentStep.label.toLowerCase()}...
               </motion.p>
             </AnimatePresence>
-
           </div>
-
         </div>
-
       </div>
     </div>
   );
@@ -596,7 +618,8 @@ function PipelineStep({
   return (
     <motion.div
       animate={{
-        x: active ? 3 : 0,
+        x: active ? 5 : 0,
+        scale: active ? 1.01 : 1,
       }}
       transition={{
         duration: 0.25,
@@ -605,9 +628,7 @@ function PipelineStep({
     >
       <motion.div
         animate={{
-          scale: active
-            ? 1.08
-            : 1,
+          scale: active ? 1.09 : 1,
         }}
         className={[
           "relative z-10 flex size-8 shrink-0 items-center justify-center rounded-full border transition-colors duration-300",
@@ -625,7 +646,13 @@ function PipelineStep({
         />
       </motion.div>
 
-      <div
+      <motion.div
+        animate={{
+          opacity:
+            active || completed
+              ? 1
+              : 0.72,
+        }}
         className={[
           "flex min-h-10 flex-1 items-center justify-between rounded-xl border px-3 transition-all duration-300",
           active
@@ -649,7 +676,7 @@ function PipelineStep({
         <span className="font-code text-[7px] text-text-muted">
           0{index + 1}
         </span>
-      </div>
+      </motion.div>
     </motion.div>
   );
 }

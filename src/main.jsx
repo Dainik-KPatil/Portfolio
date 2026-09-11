@@ -15,28 +15,42 @@ import "@fontsource/jetbrains-mono/500.css";
 import "@fontsource/jetbrains-mono/600.css";
 
 import "./index.css";
+import "./accessibility.css";
+
 import App from "./App.jsx";
 
 function applyInitialTheme() {
-  const savedTheme = localStorage.getItem("dainik-theme");
+  const savedTheme =
+    localStorage.getItem(
+      "dainik-theme",
+    );
 
-  if (savedTheme === "dark" || savedTheme === "light") {
-    document.documentElement.dataset.theme = savedTheme;
+  if (
+    savedTheme === "dark" ||
+    savedTheme === "light"
+  ) {
+    document.documentElement.dataset.theme =
+      savedTheme;
+
     return;
   }
 
-  const prefersLight = window.matchMedia(
-    "(prefers-color-scheme: light)",
-  ).matches;
+  const prefersLight =
+    window.matchMedia(
+      "(prefers-color-scheme: light)",
+    ).matches;
 
-  document.documentElement.dataset.theme = prefersLight
-    ? "light"
-    : "dark";
+  document.documentElement.dataset.theme =
+    prefersLight
+      ? "light"
+      : "dark";
 }
 
 applyInitialTheme();
 
-createRoot(document.getElementById("root")).render(
+createRoot(
+  document.getElementById("root"),
+).render(
   <StrictMode>
     <App />
   </StrictMode>,
