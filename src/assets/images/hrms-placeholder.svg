@@ -1,0 +1,323 @@
+<svg
+  width="1600"
+  height="1000"
+  viewBox="0 0 1600 1000"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <rect
+    width="1600"
+    height="1000"
+    fill="#0B0D12"
+  />
+
+  <defs>
+    <linearGradient
+      id="bg"
+      x1="120"
+      y1="80"
+      x2="1480"
+      y2="920"
+      gradientUnits="userSpaceOnUse"
+    >
+      <stop
+        stop-color="#4F8CFF"
+        stop-opacity="0.18"
+      />
+
+      <stop
+        offset="0.45"
+        stop-color="#101218"
+        stop-opacity="0"
+      />
+
+      <stop
+        offset="1"
+        stop-color="#48D7FF"
+        stop-opacity="0.12"
+      />
+    </linearGradient>
+  </defs>
+
+  <rect
+    width="1600"
+    height="1000"
+    fill="url(#bg)"
+  />
+
+  <rect
+    x="90"
+    y="90"
+    width="1420"
+    height="820"
+    rx="36"
+    fill="#101218"
+    stroke="#2A303B"
+  />
+
+  <rect
+    x="90"
+    y="90"
+    width="1420"
+    height="70"
+    rx="36"
+    fill="#13161D"
+  />
+
+  <circle
+    cx="130"
+    cy="125"
+    r="8"
+    fill="#FF6B6B"
+  />
+
+  <circle
+    cx="158"
+    cy="125"
+    r="8"
+    fill="#FFB86B"
+  />
+
+  <circle
+    cx="186"
+    cy="125"
+    r="8"
+    fill="#22C55E"
+  />
+
+  <rect
+    x="90"
+    y="160"
+    width="250"
+    height="750"
+    fill="#0D1015"
+  />
+
+  <rect
+    x="125"
+    y="205"
+    width="58"
+    height="58"
+    rx="16"
+    fill="#4F8CFF"
+  />
+
+  <text
+    x="143"
+    y="243"
+    fill="#FFFFFF"
+    font-family="Arial, sans-serif"
+    font-size="24"
+    font-weight="700"
+  >
+    HR
+  </text>
+
+  <g
+    fill="#252B35"
+  >
+    <rect x="125" y="310" width="180" height="42" rx="12"/>
+    <rect x="125" y="366" width="180" height="42" rx="12"/>
+    <rect x="125" y="422" width="180" height="42" rx="12"/>
+    <rect x="125" y="478" width="180" height="42" rx="12"/>
+    <rect x="125" y="534" width="180" height="42" rx="12"/>
+    <rect x="125" y="590" width="180" height="42" rx="12"/>
+  </g>
+
+  <rect
+    x="380"
+    y="205"
+    width="1090"
+    height="80"
+    rx="18"
+    fill="#13161D"
+    stroke="#252B35"
+  />
+
+  <text
+    x="420"
+    y="255"
+    fill="#F6F8FC"
+    font-family="Arial, sans-serif"
+    font-size="28"
+    font-weight="700"
+  >
+    HR Operations Dashboard
+  </text>
+
+  <g>
+    <rect
+      x="380"
+      y="320"
+      width="245"
+      height="140"
+      rx="22"
+      fill="#13161D"
+      stroke="#252B35"
+    />
+
+    <rect
+      x="645"
+      y="320"
+      width="245"
+      height="140"
+      rx="22"
+      fill="#13161D"
+      stroke="#4F8CFF"
+      stroke-opacity="0.35"
+    />
+
+    <rect
+      x="910"
+      y="320"
+      width="245"
+      height="140"
+      rx="22"
+      fill="#13161D"
+      stroke="#252B35"
+    />
+
+    <rect
+      x="1175"
+      y="320"
+      width="295"
+      height="140"
+      rx="22"
+      fill="#13161D"
+      stroke="#252B35"
+    />
+  </g>
+
+  <g
+    fill="#677080"
+    font-family="Arial, sans-serif"
+    font-size="16"
+  >
+    <text x="415" y="360">EMPLOYEES</text>
+    <text x="680" y="360">ATTENDANCE</text>
+    <text x="945" y="360">PAYROLL</text>
+    <text x="1210" y="360">ACCESS</text>
+  </g>
+
+  <g
+    fill="#F6F8FC"
+    font-family="Arial, sans-serif"
+    font-size="29"
+    font-weight="700"
+  >
+    <text x="415" y="414">Records</text>
+    <text x="680" y="414">Processing</text>
+    <text x="945" y="414">Workflow</text>
+    <text x="1210" y="414">Roles</text>
+  </g>
+
+  <rect
+    x="380"
+    y="495"
+    width="690"
+    height="345"
+    rx="24"
+    fill="#13161D"
+    stroke="#252B35"
+  />
+
+  <text
+    x="420"
+    y="545"
+    fill="#F6F8FC"
+    font-family="Arial, sans-serif"
+    font-size="22"
+    font-weight="700"
+  >
+    Attendance Processing
+  </text>
+
+  <g>
+    <rect x="420" y="585" width="610" height="46" rx="12" fill="#0D1015"/>
+    <rect x="420" y="647" width="610" height="46" rx="12" fill="#0D1015"/>
+    <rect x="420" y="709" width="610" height="46" rx="12" fill="#0D1015"/>
+    <rect x="420" y="771" width="610" height="46" rx="12" fill="#0D1015"/>
+  </g>
+
+  <g
+    fill="#8F98A6"
+    font-family="monospace"
+    font-size="15"
+  >
+    <text x="445" y="614">EMP-01</text>
+    <text x="445" y="676">EMP-02</text>
+    <text x="445" y="738">EMP-03</text>
+    <text x="445" y="800">EMP-04</text>
+  </g>
+
+  <g
+    fill="#22C55E"
+    font-family="monospace"
+    font-size="14"
+  >
+    <text x="900" y="614">PRESENT</text>
+    <text x="900" y="800">PRESENT</text>
+  </g>
+
+  <text
+    x="900"
+    y="676"
+    fill="#FFB86B"
+    font-family="monospace"
+    font-size="14"
+  >
+    LEAVE
+  </text>
+
+  <text
+    x="880"
+    y="738"
+    fill="#4F8CFF"
+    font-family="monospace"
+    font-size="14"
+  >
+    PROCESSING
+  </text>
+
+  <rect
+    x="1100"
+    y="495"
+    width="370"
+    height="345"
+    rx="24"
+    fill="#13161D"
+    stroke="#252B35"
+  />
+
+  <text
+    x="1140"
+    y="545"
+    fill="#F6F8FC"
+    font-family="Arial, sans-serif"
+    font-size="22"
+    font-weight="700"
+  >
+    Workflow
+  </text>
+
+  <g
+    font-family="monospace"
+    font-size="15"
+  >
+    <text x="1140" y="605" fill="#4F8CFF">01  Import</text>
+    <text x="1140" y="655" fill="#4F8CFF">02  Validate</text>
+    <text x="1140" y="705" fill="#48D7FF">03  Process</text>
+    <text x="1140" y="755" fill="#F6F8FC">04  Payroll</text>
+  </g>
+
+  <text
+    x="120"
+    y="955"
+    fill="#5F6875"
+    font-family="monospace"
+    font-size="14"
+    letter-spacing="3"
+  >
+    PORTFOLIO MOCKUP — REPLACE WITH SANITISED HRMS SCREENSHOT
+  </text>
+</svg>

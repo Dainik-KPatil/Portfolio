@@ -1,0 +1,220 @@
+<svg
+  width="900"
+  height="1100"
+  viewBox="0 0 900 1100"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <rect
+    width="900"
+    height="1100"
+    fill="#0D1015"
+  />
+
+  <defs>
+    <linearGradient
+      id="background"
+      x1="110"
+      y1="80"
+      x2="810"
+      y2="1040"
+      gradientUnits="userSpaceOnUse"
+    >
+      <stop
+        stop-color="#4F8CFF"
+        stop-opacity="0.26"
+      />
+
+      <stop
+        offset="0.48"
+        stop-color="#101218"
+        stop-opacity="0"
+      />
+
+      <stop
+        offset="1"
+        stop-color="#48D7FF"
+        stop-opacity="0.16"
+      />
+    </linearGradient>
+
+    <linearGradient
+      id="figure"
+      x1="450"
+      y1="320"
+      x2="450"
+      y2="1040"
+      gradientUnits="userSpaceOnUse"
+    >
+      <stop
+        stop-color="#2C3441"
+      />
+
+      <stop
+        offset="1"
+        stop-color="#11151D"
+      />
+    </linearGradient>
+
+    <filter
+      id="blur"
+      x="-150"
+      y="-150"
+      width="1200"
+      height="1400"
+      filterUnits="userSpaceOnUse"
+    >
+      <feGaussianBlur
+        stdDeviation="90"
+      />
+    </filter>
+  </defs>
+
+  <rect
+    width="900"
+    height="1100"
+    fill="url(#background)"
+  />
+
+  <circle
+    cx="690"
+    cy="260"
+    r="170"
+    fill="#48D7FF"
+    fill-opacity="0.08"
+    filter="url(#blur)"
+  />
+
+  <circle
+    cx="220"
+    cy="760"
+    r="230"
+    fill="#4F8CFF"
+    fill-opacity="0.09"
+    filter="url(#blur)"
+  />
+
+  <g
+    opacity="0.28"
+    stroke="#3A4250"
+  >
+    <path d="M0 180H900" />
+    <path d="M0 360H900" />
+    <path d="M0 540H900" />
+    <path d="M0 720H900" />
+    <path d="M0 900H900" />
+
+    <path d="M180 0V1100" />
+    <path d="M360 0V1100" />
+    <path d="M540 0V1100" />
+    <path d="M720 0V1100" />
+  </g>
+
+  <circle
+    cx="450"
+    cy="382"
+    r="138"
+    fill="url(#figure)"
+  />
+
+  <path
+    d="
+      M213 1010
+      C220 780 293 628 450 628
+      C607 628 680 780 687 1010
+      H213Z
+    "
+    fill="url(#figure)"
+  />
+
+  <circle
+    cx="450"
+    cy="382"
+    r="147"
+    stroke="#4F8CFF"
+    stroke-opacity="0.22"
+    stroke-width="2"
+  />
+
+  <rect
+    x="88"
+    y="76"
+    width="214"
+    height="58"
+    rx="29"
+    fill="#101218"
+    stroke="#2B313C"
+  />
+
+  <circle
+    cx="120"
+    cy="105"
+    r="6"
+    fill="#22C55E"
+  />
+
+  <text
+    x="140"
+    y="111"
+    fill="#9FA7B5"
+    font-family="monospace"
+    font-size="17"
+    letter-spacing="2"
+  >
+    DEVELOPER
+  </text>
+
+  <rect
+    x="568"
+    y="850"
+    width="242"
+    height="142"
+    rx="24"
+    fill="#101218"
+    fill-opacity="0.94"
+    stroke="#303744"
+  />
+
+  <text
+    x="596"
+    y="891"
+    fill="#666F7E"
+    font-family="monospace"
+    font-size="14"
+    letter-spacing="1.8"
+  >
+    CURRENT STACK
+  </text>
+
+  <text
+    x="596"
+    y="933"
+    fill="#F6F8FC"
+    font-family="sans-serif"
+    font-size="24"
+    font-weight="700"
+  >
+    PHP / LARAVEL
+  </text>
+
+  <text
+    x="596"
+    y="965"
+    fill="#4F8CFF"
+    font-family="monospace"
+    font-size="15"
+  >
+    backend.systems
+  </text>
+
+  <text
+    x="80"
+    y="1038"
+    fill="#646D7A"
+    font-family="monospace"
+    font-size="13"
+    letter-spacing="3"
+  >
+    REPLACE WITH YOUR PROFILE IMAGE
+  </text>
+</svg>
