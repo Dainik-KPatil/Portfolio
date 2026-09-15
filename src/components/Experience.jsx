@@ -1,87 +1,136 @@
 import { motion } from "framer-motion";
-import {
-  ArrowDownRight,
-  Braces,
-  Code2,
-  Database,
-  FileCode2,
-  GitBranch,
-  Layers3,
-  ServerCog,
-  Workflow,
-} from "lucide-react";
 
-const currentRoleHighlights = [
+const projects = [
   {
-    title: "Business Systems",
+    number: "01",
+    name: "HRMS",
     description:
-      "HRMS, attendance, payroll, recruitment, lead management and operational workflows.",
-    icon: Layers3,
+      "Human resource, attendance, payroll and employee workflow management.",
   },
   {
-    title: "Backend Development",
+    number: "02",
+    name: "Insity",
     description:
-      "Laravel controllers, models, validation, authentication, APIs and business logic.",
-    icon: ServerCog,
+      "Lead allocation and counsellor workflow application.",
   },
   {
-    title: "Data & Processing",
+    number: "03",
+    name: "Compliance Documents",
     description:
-      "MySQL, Eloquent, Query Builder, imports, salary-related data and application records.",
-    icon: Database,
+      "Print-document workflow application for the compliance team.",
   },
   {
-    title: "Application Delivery",
+    number: "04",
+    name: "Tudu",
     description:
-      "AJAX workflows, debugging, file handling, PDF generation and feature integration.",
-    icon: Workflow,
+      "Internal task assignment and work-tracking system.",
+  },
+  {
+    number: "05",
+    name: "Web Platforms",
+    description:
+      "Websites and landing pages for multiple education-focused entities.",
   },
 ];
 
-const workflowItems = [
-  "Requirement",
-  "Data",
-  "Logic",
-  "Database",
-  "Interface",
-  "Delivery",
+const technologies = [
+  {
+    name: "PHP",
+    image: "/tech/php.png",
+    fallback: "PHP",
+  },
+  {
+    name: "Laravel",
+    image: "/tech/laravel.png",
+    fallback: "L",
+  },
+  {
+    name: "Core PHP",
+    image: "/tech/php.png",
+    fallback: "PHP",
+  },
+  {
+    name: "MySQL",
+    image: "/tech/mysql.png",
+    fallback: "SQL",
+  },
+  {
+    name: "JavaScript",
+    image: "/tech/javascript.png",
+    fallback: "JS",
+  },
+  {
+    name: "Blade",
+    image: "/tech/laravel.png",
+    fallback: "BLD",
+  },
+  {
+    name: "Bootstrap",
+    image: "/tech/bootstrap.png",
+    fallback: "B",
+  },
+  {
+    name: "Tailwind",
+    image: "/tech/tailwind.png",
+    fallback: "TW",
+  },
+  {
+    name: "REST API",
+    image: "/tech/rest-api.png",
+    fallback: "API",
+  },
+  {
+    name: "React",
+    image: "/tech/react.png",
+    fallback: "R",
+  },
 ];
 
-const previousExperience = [
+const deploymentTools = [
+  "cPanel",
+  "WHM",
+  "Plesk",
+  "Hostinger",
+  "Cloud Servers",
+];
+
+const growthItems = [
   {
-    label: "Python / Django",
+    number: "01",
+    title: "Web Fundamentals",
     description:
-      "Built backend foundations through web applications, CRUD workflows, authentication and APIs.",
+      "Stronger understanding of complete browser-to-backend application behaviour.",
   },
   {
-    label: "Flask / APIs",
+    number: "02",
+    title: "Clean Architecture",
     description:
-      "Worked with lightweight backend applications, integrations and database-driven development.",
+      "Better separation of responsibilities across controllers, models and application logic.",
   },
   {
-    label: "Scraping / Automation",
+    number: "03",
+    title: "Data Segregation",
     description:
-      "Developed practical data extraction and processing workflows using Python.",
+      "Structuring application data clearly across entities, relationships and workflows.",
+  },
+  {
+    number: "04",
+    title: "Application Flow",
+    description:
+      "Designing predictable flow from requirement and input through processing and output.",
   },
 ];
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.09,
-    },
-  },
-};
-
-const revealVariants = {
+const reveal = {
   hidden: {
     opacity: 0,
     y: 24,
   },
+
   visible: {
     opacity: 1,
     y: 0,
+
     transition: {
       duration: 0.55,
       ease: [0.22, 1, 0.36, 1],
@@ -93,26 +142,38 @@ function Experience() {
   return (
     <section
       id="experience"
-      className="section-shell relative overflow-hidden border-t border-border bg-surface-alt/30"
+      className="section-shell relative overflow-hidden border-t border-border"
       aria-labelledby="experience-heading"
     >
+      {/* =====================================================
+          BACKGROUND
+      ====================================================== */}
+
       <div
-        className="pointer-events-none absolute -left-56 top-20 size-[540px] rounded-full bg-accent/[0.045] blur-[160px]"
+        className="technical-grid pointer-events-none absolute inset-0 opacity-[0.08]"
         aria-hidden="true"
       />
 
       <div
-        className="pointer-events-none absolute -right-48 bottom-16 size-[500px] rounded-full bg-cyan/[0.04] blur-[150px]"
+        className="pointer-events-none absolute -left-52 top-24 size-[520px] rounded-full bg-accent/[0.045] blur-[170px]"
+        aria-hidden="true"
+      />
+
+      <div
+        className="pointer-events-none absolute -right-52 bottom-16 size-[500px] rounded-full bg-accent/[0.03] blur-[170px]"
         aria-hidden="true"
       />
 
       <div className="site-container relative">
 
-        {/* Header */}
+        {/* =====================================================
+            SECTION HEADER
+        ====================================================== */}
+
         <motion.div
           initial={{
             opacity: 0,
-            y: 20,
+            y: 18,
           }}
           whileInView={{
             opacity: 1,
@@ -120,353 +181,462 @@ function Experience() {
           }}
           viewport={{
             once: true,
-            amount: 0.3,
+            amount: 0.25,
           }}
           transition={{
             duration: 0.55,
             ease: [0.22, 1, 0.36, 1],
           }}
-          className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.6fr)] lg:items-end"
+          className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(330px,0.62fr)] lg:items-end"
         >
           <div>
-            <p className="section-eyebrow">
-              Professional Experience
-            </p>
+            <div className="flex items-center gap-3">
+              <span className="h-px w-8 bg-accent" />
+
+              <span className="section-eyebrow">
+                Professional Experience
+              </span>
+            </div>
 
             <h2
               id="experience-heading"
               className="section-heading mt-5 max-w-5xl"
             >
-              REAL WORK.
+              BUILDING SYSTEMS
               <br />
 
               <span className="section-heading-muted">
-                REAL SYSTEMS.
+                THAT RUN THE
               </span>
 
               <br />
 
               <span className="text-gradient-blue">
-                CONTINUOUS DELIVERY.
+                BUSINESS.
               </span>
             </h2>
           </div>
 
           <p className="section-copy max-w-xl lg:pb-1">
-            My strongest professional experience is in building and
-            maintaining PHP/Laravel applications where backend logic,
-            data flow and business workflows have to work together.
+            My current professional work is centred around developing,
+            maintaining and evolving practical business applications with
+            strong backend logic, structured data and clearly defined
+            application flow.
           </p>
         </motion.div>
 
-        {/* Current Role */}
-        <motion.div
-          variants={containerVariants}
+        {/* =====================================================
+            EXPERIENCE GLASS
+        ====================================================== */}
+
+        <motion.article
+          variants={reveal}
           initial="hidden"
           whileInView="visible"
           viewport={{
             once: true,
-            amount: 0.12,
+            amount: 0.1,
           }}
-          className="mt-14 grid gap-5 xl:grid-cols-[minmax(0,1.22fr)_minmax(340px,0.78fr)]"
+          className="relative mt-14 overflow-hidden rounded-[30px] border border-border bg-surface/72 backdrop-blur-xl"
         >
-          <motion.article
-            variants={revealVariants}
-            className="relative overflow-hidden rounded-[28px] border border-border bg-surface p-6 sm:p-8 lg:p-10"
-          >
-            <div
-              className="pointer-events-none absolute -right-20 -top-20 size-64 rounded-full bg-accent/[0.06] blur-3xl"
-              aria-hidden="true"
-            />
+          {/* red top accent */}
 
-            <div className="relative">
-              <div className="flex flex-col gap-5 border-b border-border pb-7 sm:flex-row sm:items-start sm:justify-between">
-                <div>
-                  <p className="font-code text-[9px] font-semibold uppercase tracking-[0.16em] text-accent">
-                    Feb 2025 — Present
-                  </p>
+          <div
+            className="pointer-events-none absolute left-0 top-0 z-20 h-px w-[72%] bg-gradient-to-r from-accent via-accent/35 to-transparent"
+            aria-hidden="true"
+          />
 
-                  <h3 className="mt-4 font-heading text-4xl font-bold tracking-[-0.045em] text-text-primary sm:text-5xl">
-                    ISBM Group
-                  </h3>
+          {/* ambient glow */}
 
-                  <p className="mt-2 text-base font-medium text-text-secondary sm:text-lg">
-                    Web Developer / PHP Laravel Developer
-                  </p>
-                </div>
+          <div
+            className="pointer-events-none absolute -right-20 -top-32 size-[420px] rounded-full bg-accent/[0.055] blur-[150px]"
+            aria-hidden="true"
+          />
 
-                <div className="flex size-12 items-center justify-center rounded-2xl border border-accent/20 bg-accent-soft text-accent">
-                  <Code2
-                    size={21}
-                    strokeWidth={1.8}
-                    aria-hidden="true"
-                  />
-                </div>
-              </div>
+          {/* =================================================
+              ROLE HEADER
+          ================================================== */}
 
-              <p className="mt-7 max-w-3xl text-base leading-8 text-text-secondary sm:text-lg">
-                Building and maintaining real-world business
-                applications across employee management, attendance,
-                payroll, recruitment, lead operations and other
-                workflow-driven systems using PHP, Laravel and MySQL.
+          <div className="relative flex flex-col gap-5 border-b border-border px-5 py-6 sm:px-7 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+            <div>
+              <p className="font-code text-[8px] font-semibold uppercase tracking-[0.2em] text-accent">
+                Feb 2025 — Present
               </p>
 
-              <div className="mt-8 grid gap-3 md:grid-cols-2">
-                {currentRoleHighlights.map((item) => {
-                  const Icon = item.icon;
+              <div className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <h3 className="font-heading text-3xl font-bold tracking-[-0.045em] text-text-primary sm:text-4xl">
+                  ISBM Group
+                </h3>
 
-                  return (
-                    <div
-                      key={item.title}
-                      className="group rounded-2xl border border-border bg-surface-alt/55 p-5 transition-all duration-200 hover:-translate-y-1 hover:border-border-strong hover:bg-surface-hover"
-                    >
-                      <div className="flex items-center justify-between gap-4">
-                        <Icon
-                          size={18}
-                          strokeWidth={1.8}
-                          className="text-accent"
-                          aria-hidden="true"
-                        />
-
-                        <span className="size-1.5 rounded-full bg-border-strong transition-colors duration-200 group-hover:bg-cyan" />
-                      </div>
-
-                      <h4 className="mt-6 font-heading text-lg font-semibold tracking-[-0.025em] text-text-primary">
-                        {item.title}
-                      </h4>
-
-                      <p className="mt-2 text-sm leading-6 text-text-secondary">
-                        {item.description}
-                      </p>
-                    </div>
-                  );
-                })}
+                <span className="font-code text-[7px] uppercase tracking-[0.16em] text-text-muted">
+                  Mumbai
+                </span>
               </div>
+
+              <p className="mt-2 text-sm font-medium text-text-secondary sm:text-base">
+                Web Developer / PHP Laravel Developer
+              </p>
             </div>
-          </motion.article>
 
-          {/* Live workflow style panel */}
-          <motion.aside
-            variants={revealVariants}
-            className="glass-panel overflow-hidden rounded-[28px]"
-          >
-            <div className="flex items-center justify-between border-b border-border px-5 py-4 sm:px-6">
-              <div className="flex items-center gap-2">
-                <span className="size-2 rounded-full bg-[#ff6b6b]" />
-                <span className="size-2 rounded-full bg-warm" />
-                <span className="size-2 rounded-full bg-success" />
-              </div>
+            <div className="flex items-center gap-3">
+              <span className="relative flex size-2">
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-success opacity-30" />
 
-              <span className="technical-label">
-                work.flow
+                <span className="relative inline-flex size-2 rounded-full bg-success" />
+              </span>
+
+              <span className="font-code text-[7px] font-semibold uppercase tracking-[0.14em] text-text-muted">
+                Current Role
               </span>
             </div>
+          </div>
 
-            <div className="p-5 sm:p-6">
-              <div className="flex items-center justify-between gap-4">
+          {/* =================================================
+              MAIN EXPERIENCE VIEW
+          ================================================== */}
+
+          <div className="relative grid xl:grid-cols-[minmax(0,1.15fr)_minmax(340px,0.85fr)]">
+
+            {/* =================================================
+                LEFT — WHAT I BUILD
+            ================================================== */}
+
+            <div className="border-b border-border px-5 py-7 sm:px-7 lg:px-8 xl:border-b-0 xl:border-r">
+
+              <div className="flex items-end justify-between gap-5">
                 <div>
-                  <p className="technical-label">
-                    How the work moves
+                  <p className="font-code text-[8px] font-semibold uppercase tracking-[0.18em] text-accent">
+                    Systems I&apos;ve Worked On
                   </p>
 
-                  <h3 className="mt-2 font-heading text-xl font-semibold text-text-primary">
-                    From requirement to working feature.
-                  </h3>
+                  <h4 className="mt-3 font-heading text-2xl font-semibold tracking-[-0.035em] text-text-primary sm:text-3xl">
+                    From internal operations
+                    <br />
+                    to public-facing platforms.
+                  </h4>
                 </div>
 
-                <GitBranch
-                  size={19}
-                  className="shrink-0 text-cyan"
-                  aria-hidden="true"
-                />
+                <span className="hidden font-code text-[8px] uppercase tracking-[0.12em] text-text-muted sm:block">
+                  05 Systems
+                </span>
               </div>
 
-              <div className="relative mt-7">
-                <div
-                  className="absolute bottom-4 left-[15px] top-4 w-px bg-border"
-                  aria-hidden="true"
-                />
+              <div className="mt-8">
+                {projects.map((project, index) => (
+                  <ProjectRow
+                    key={project.name}
+                    project={project}
+                    index={index}
+                  />
+                ))}
+              </div>
 
-                <div className="space-y-3">
-                  {workflowItems.map((item, index) => (
-                    <motion.div
-                      key={item}
-                      initial={{
-                        opacity: 0,
-                        x: 12,
-                      }}
-                      whileInView={{
-                        opacity: 1,
-                        x: 0,
-                      }}
-                      viewport={{
-                        once: true,
-                      }}
-                      transition={{
-                        duration: 0.35,
-                        delay: index * 0.06,
-                      }}
-                      className="relative flex items-center gap-3"
+            </div>
+
+            {/* =================================================
+                RIGHT — STACK
+            ================================================== */}
+
+            <div className="px-5 py-7 sm:px-7 lg:px-8">
+
+              <p className="font-code text-[8px] font-semibold uppercase tracking-[0.18em] text-accent">
+                Working Stack
+              </p>
+
+              <h4 className="mt-3 font-heading text-2xl font-semibold tracking-[-0.035em] text-text-primary">
+                Technologies I use
+                <br />
+                in production.
+              </h4>
+
+              <p className="mt-3 max-w-md text-sm leading-6 text-text-secondary">
+                Backend-focused development with frontend utilities selected
+                according to the requirements of each system.
+              </p>
+
+              {/* Technology logos */}
+
+              <div className="mt-7 grid grid-cols-2 gap-x-5 gap-y-5 sm:grid-cols-3 xl:grid-cols-2 2xl:grid-cols-3">
+                {technologies.map((technology) => (
+                  <TechnologyItem
+                    key={technology.name}
+                    technology={technology}
+                  />
+                ))}
+              </div>
+
+              {/* deployment */}
+
+              <div className="mt-8 border-t border-border pt-6">
+                <p className="font-code text-[7px] font-semibold uppercase tracking-[0.16em] text-text-muted">
+                  Deployment & Hosting
+                </p>
+
+                <div className="mt-4 flex flex-wrap gap-x-4 gap-y-3">
+                  {deploymentTools.map((tool) => (
+                    <span
+                      key={tool}
+                      className="inline-flex items-center gap-2 text-xs font-medium text-text-secondary"
                     >
-                      <span
-                        className={[
-                          "relative z-10 flex size-8 items-center justify-center rounded-full border font-code text-[8px]",
-                          index === 2 || index === 3
-                            ? "border-accent/35 bg-accent-soft text-accent"
-                            : "border-border bg-surface text-text-muted",
-                        ].join(" ")}
-                      >
-                        0{index + 1}
-                      </span>
+                      <span className="size-1 rounded-full bg-accent" />
 
-                      <div className="flex min-h-11 flex-1 items-center justify-between rounded-xl border border-border bg-surface-alt/55 px-3.5">
-                        <span className="font-code text-[9px] uppercase tracking-[0.1em] text-text-secondary">
-                          {item}
-                        </span>
-
-                        <ArrowDownRight
-                          size={12}
-                          className="text-text-muted"
-                          aria-hidden="true"
-                        />
-                      </div>
-                    </motion.div>
+                      {tool}
+                    </span>
                   ))}
                 </div>
               </div>
 
-              <div className="mt-7 rounded-2xl border border-border bg-background/55 p-4">
-                <p className="font-code text-[9px] leading-6 text-text-secondary">
-                  <span className="text-accent">
-                    requirement
-                  </span>
-                  {" → "}
-                  <span className="text-text-primary">
-                    implementation
-                  </span>
-                  {" → "}
-                  <span className="text-cyan">
-                    debugging
-                  </span>
-                  {" → "}
-                  <span className="text-success">
-                    delivery
-                  </span>
+            </div>
+          </div>
+
+          {/* =================================================
+              WHAT THE WORK INVOLVES
+          ================================================== */}
+
+          <div className="relative border-t border-border px-5 py-7 sm:px-7 lg:px-8">
+            <div className="grid gap-6 lg:grid-cols-[220px_minmax(0,1fr)]">
+              <div>
+                <p className="font-code text-[8px] font-semibold uppercase tracking-[0.18em] text-accent">
+                  What The Work Involves
                 </p>
+
+                <h4 className="mt-2 font-heading text-xl font-semibold tracking-[-0.03em] text-text-primary">
+                  End-to-end feature thinking.
+                </h4>
+              </div>
+
+              <p className="max-w-4xl text-sm leading-7 text-text-secondary sm:text-[15px]">
+                The work goes beyond creating screens. It involves
+                understanding organisational requirements, designing the data
+                structure, implementing business rules, building calculations,
+                defining privileges, connecting modules and maintaining the
+                complete flow until the feature reaches production.
+              </p>
+            </div>
+          </div>
+
+          {/* =================================================
+              PROFESSIONAL GROWTH
+          ================================================== */}
+
+          <div className="relative border-t border-border px-5 py-7 sm:px-7 lg:px-8">
+            <div className="grid gap-8 lg:grid-cols-[220px_minmax(0,1fr)]">
+              <div>
+                <p className="font-code text-[8px] font-semibold uppercase tracking-[0.18em] text-accent">
+                  Professional Growth
+                </p>
+
+                <h4 className="mt-2 max-w-[200px] font-heading text-xl font-semibold leading-tight tracking-[-0.03em] text-text-primary">
+                  What this experience strengthened.
+                </h4>
+              </div>
+
+              <div className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+                {growthItems.map((item) => (
+                  <GrowthItem
+                    key={item.number}
+                    item={item}
+                  />
+                ))}
               </div>
             </div>
-          </motion.aside>
-        </motion.div>
+          </div>
 
-        {/* Earlier experience */}
-        <motion.div
-          initial={{
-            opacity: 0,
-            y: 20,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-          }}
-          viewport={{
-            once: true,
-            amount: 0.3,
-          }}
-          transition={{
-            duration: 0.55,
-          }}
-          className="mt-8 grid gap-5 lg:grid-cols-[minmax(260px,0.5fr)_minmax(0,1.5fr)]"
-        >
-          <div className="rounded-2xl border border-border bg-background/40 p-6 sm:p-7">
-            <p className="technical-label">
-              Earlier Foundation
-            </p>
+          {/* =================================================
+              FINAL EXPERIENCE STRIP
+          ================================================== */}
 
-            <h3 className="mt-5 font-heading text-3xl font-semibold tracking-[-0.035em] text-text-primary">
-              Python / Django
-            </h3>
+          <div className="relative border-t border-border bg-background/20 px-5 py-5 sm:px-7 lg:px-8">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 
-            <p className="mt-4 text-sm leading-7 text-text-secondary">
-              My earlier backend experience helped build the foundation
-              I now apply continuously in Laravel-based business systems.
-            </p>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                <FlowStep value="Requirement" />
 
-            <div className="mt-6 flex items-center gap-2">
-              <Braces
-                size={15}
-                className="text-accent"
-                aria-hidden="true"
-              />
+                <FlowArrow />
 
-              <span className="font-code text-[9px] uppercase tracking-[0.12em] text-text-muted">
-                Backend foundation
+                <FlowStep value="Architecture" />
+
+                <FlowArrow />
+
+                <FlowStep value="Data" />
+
+                <FlowArrow />
+
+                <FlowStep value="Logic" />
+
+                <FlowArrow />
+
+                <FlowStep value="Interface" />
+
+                <FlowArrow />
+
+                <FlowStep value="Deployment" active />
+              </div>
+
+              <span className="font-code text-[7px] uppercase tracking-[0.14em] text-text-muted">
+                PHP / Laravel / MySQL / REST APIs
               </span>
+
             </div>
           </div>
 
-          <div className="grid gap-3 md:grid-cols-3">
-            {previousExperience.map((item, index) => (
-              <motion.article
-                key={item.label}
-                whileHover={{
-                  y: -4,
-                }}
-                transition={{
-                  duration: 0.2,
-                }}
-                className="group rounded-2xl border border-border bg-surface p-5 sm:p-6"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <span className="font-code text-[8px] text-text-muted">
-                    0{index + 1}
-                  </span>
-
-                  <FileCode2
-                    size={16}
-                    className="text-text-muted transition-colors duration-200 group-hover:text-accent"
-                    aria-hidden="true"
-                  />
-                </div>
-
-                <h4 className="mt-7 font-heading text-lg font-semibold text-text-primary">
-                  {item.label}
-                </h4>
-
-                <p className="mt-3 text-sm leading-6 text-text-secondary">
-                  {item.description}
-                </p>
-              </motion.article>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Closing line */}
-        <motion.div
-          initial={{
-            opacity: 0,
-          }}
-          whileInView={{
-            opacity: 1,
-          }}
-          viewport={{
-            once: true,
-          }}
-          transition={{
-            duration: 0.5,
-          }}
-          className="mt-8 flex flex-col gap-3 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between"
-        >
-          <span className="technical-label">
-            Current direction
-          </span>
-
-          <p className="max-w-3xl text-sm leading-6 text-text-secondary sm:text-right">
-            PHP and Laravel are now the centre of my professional
-            development work, supported by a broader backend foundation.
-          </p>
-        </motion.div>
+        </motion.article>
       </div>
     </section>
+  );
+}
+
+/* =========================================================
+   PROJECT ROW
+========================================================= */
+
+function ProjectRow({
+  project,
+  index,
+}) {
+  return (
+    <motion.div
+      initial={{
+        opacity: 0,
+        x: -10,
+      }}
+      whileInView={{
+        opacity: 1,
+        x: 0,
+      }}
+      viewport={{
+        once: true,
+      }}
+      transition={{
+        duration: 0.35,
+        delay: index * 0.045,
+      }}
+      className="group grid grid-cols-[40px_minmax(0,1fr)_auto] items-center gap-4 border-t border-border py-4 first:border-t-0 first:pt-0"
+    >
+      <span className="font-code text-[8px] font-semibold text-accent">
+        {project.number}
+      </span>
+
+      <div>
+        <h5 className="font-heading text-sm font-semibold text-text-primary sm:text-base">
+          {project.name}
+        </h5>
+
+        <p className="mt-1 text-xs leading-5 text-text-secondary sm:text-[13px]">
+          {project.description}
+        </p>
+      </div>
+
+      <span className="text-sm text-text-muted transition-transform duration-200 group-hover:translate-x-1 group-hover:text-accent">
+        →
+      </span>
+    </motion.div>
+  );
+}
+
+/* =========================================================
+   TECHNOLOGY
+========================================================= */
+
+function TechnologyItem({
+  technology,
+}) {
+  return (
+    <div className="group flex items-center gap-3">
+      <div className="flex size-9 shrink-0 items-center justify-center">
+        <img
+          src={technology.image}
+          alt={`${technology.name} logo`}
+          loading="lazy"
+          decoding="async"
+          className="max-h-8 max-w-8 object-contain transition-transform duration-200 group-hover:scale-110"
+          onError={(event) => {
+            event.currentTarget.style.display =
+              "none";
+
+            const fallback =
+              event.currentTarget.nextElementSibling;
+
+            if (fallback) {
+              fallback.style.display =
+                "flex";
+            }
+          }}
+        />
+
+        <span
+          className="hidden size-8 items-center justify-center font-code text-[8px] font-bold text-accent"
+          aria-hidden="true"
+        >
+          {technology.fallback}
+        </span>
+      </div>
+
+      <span className="font-code text-[8px] font-medium uppercase tracking-[0.08em] text-text-secondary transition-colors duration-200 group-hover:text-text-primary">
+        {technology.name}
+      </span>
+    </div>
+  );
+}
+
+/* =========================================================
+   GROWTH ITEM
+========================================================= */
+
+function GrowthItem({
+  item,
+}) {
+  return (
+    <div className="group">
+      <div className="flex items-center gap-3">
+        <span className="font-code text-[8px] font-semibold text-accent">
+          {item.number}
+        </span>
+
+        <span className="h-px w-7 bg-border-strong transition-all duration-300 group-hover:w-12 group-hover:bg-accent" />
+      </div>
+
+      <h5 className="mt-3 font-heading text-base font-semibold text-text-primary">
+        {item.title}
+      </h5>
+
+      <p className="mt-2 max-w-md text-xs leading-5 text-text-secondary sm:text-[13px]">
+        {item.description}
+      </p>
+    </div>
+  );
+}
+
+/* =========================================================
+   FLOW
+========================================================= */
+
+function FlowStep({
+  value,
+  active = false,
+}) {
+  return (
+    <span
+      className={[
+        "font-code text-[7px] font-semibold uppercase tracking-[0.13em]",
+        active
+          ? "text-accent"
+          : "text-text-secondary",
+      ].join(" ")}
+    >
+      {value}
+    </span>
+  );
+}
+
+function FlowArrow() {
+  return (
+    <span
+      className="text-[9px] text-text-muted"
+      aria-hidden="true"
+    >
+      →
+    </span>
   );
 }
 

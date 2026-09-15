@@ -1,7 +1,6 @@
 import { Resend } from "resend";
 
-const emailPattern =
-  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function escapeHtml(value = "") {
   return String(value)
@@ -12,15 +11,9 @@ function escapeHtml(value = "") {
     .replaceAll("'", "&#039;");
 }
 
-export default async function handler(
-  request,
-  response,
-) {
+export default async function handler(request, response) {
   if (request.method !== "POST") {
-    response.setHeader(
-      "Allow",
-      "POST",
-    );
+    response.setHeader("Allow", "POST");
 
     return response.status(405).json({
       success: false,
@@ -29,23 +22,9 @@ export default async function handler(
   }
 
   try {
-    const {
-      name,
-      email,
-      message,
-      website,
-    } = request.body ?? {};
+    const { name, email, message, website } = request.body ?? {};
 
-    /*
-    |--------------------------------------------------------------------------
-    | HONEYPOT
-    |--------------------------------------------------------------------------
-    |
-    | Real users never see/fill this field.
-    | Basic bots frequently do.
-    |
-    */
-
+    // HONEYPOT
     if (website) {
       return response.status(200).json({
         success: true,
@@ -53,23 +32,13 @@ export default async function handler(
       });
     }
 
-    const cleanName =
-      String(name ?? "").trim();
+    const cleanName = String(name ?? "").trim();
+    const cleanEmail = String(email ?? "")
+      .trim()
+      .toLowerCase();
+    const cleanMessage = String(message ?? "").trim();
 
-    const cleanEmail =
-      String(email ?? "")
-        .trim()
-        .toLowerCase();
-
-    const cleanMessage =
-      String(message ?? "").trim();
-
-    /*
-    |--------------------------------------------------------------------------
-    | VALIDATION
-    |--------------------------------------------------------------------------
-    */
-
+    // VALIDATION
     if (!cleanName) {
       return response.status(422).json({
         success: false,
@@ -80,134 +49,80 @@ export default async function handler(
     if (cleanName.length < 2) {
       return response.status(422).json({
         success: false,
-        message:
-          "Please enter a valid name.",
+        message: "Please enter a valid name.",
       });
     }
 
     if (cleanName.length > 100) {
       return response.status(422).json({
         success: false,
-        message:
-          "Name cannot exceed 100 characters.",
+        message: "Name cannot exceed 100 characters.",
       });
     }
 
     if (!cleanEmail) {
       return response.status(422).json({
         success: false,
-        message:
-          "Please enter your email address.",
+        message: "Please enter your email address.",
       });
     }
 
-    if (
-      cleanEmail.length > 200 ||
-      !emailPattern.test(cleanEmail)
-    ) {
+    if (cleanEmail.length > 200 || !emailPattern.test(cleanEmail)) {
       return response.status(422).json({
         success: false,
-        message:
-          "Please enter a valid email address.",
+        message: "Please enter a valid email address.",
       });
     }
 
     if (!cleanMessage) {
       return response.status(422).json({
         success: false,
-        message:
-          "Please enter your message.",
+        message: "Please enter your message.",
       });
     }
 
     if (cleanMessage.length < 10) {
       return response.status(422).json({
         success: false,
-        message:
-          "Please provide a little more detail.",
+        message: "Please provide a little more detail.",
       });
     }
 
     if (cleanMessage.length > 5000) {
       return response.status(422).json({
         success: false,
-        message:
-          "Message cannot exceed 5000 characters.",
+        message: "Message cannot exceed 5000 characters.",
       });
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | ENVIRONMENT CHECK
-    |--------------------------------------------------------------------------
-    */
+    // ENVIRONMENT CHECK
 
-    const apiKey =
-      process.env.RESEND_API_KEY;
+    const apiKey = process.env.RESEND_API_KEY;
+    const toEmail = process.env.CONTACT_TO_EMAIL;
+    const fromEmail = process.env.CONTACT_FROM_EMAIL;
 
-    const toEmail =
-      process.env.CONTACT_TO_EMAIL;
-
-    const fromEmail =
-      process.env.CONTACT_FROM_EMAIL;
-
-    if (
-      !apiKey ||
-      !toEmail ||
-      !fromEmail
-    ) {
-      console.error(
-        "Contact form environment variables are missing.",
-      );
-
+    if (!apiKey || !toEmail || !fromEmail) {
+      console.error("Contact form environment variables are missing.");
       return response.status(500).json({
         success: false,
-        message:
-          "Contact service is temporarily unavailable.",
+        message: "Contact service is temporarily unavailable.",
       });
     }
 
-    const resend =
-      new Resend(apiKey);
+    const resend = new Resend(apiKey);
 
-    /*
-    |--------------------------------------------------------------------------
-    | SAFE VALUES
-    |--------------------------------------------------------------------------
-    */
+    // SAFE VALUES
+    const safeName = escapeHtml(cleanName);
+    const safeEmail = escapeHtml(cleanEmail);
+    const safeMessage = escapeHtml(cleanMessage).replaceAll("\n", "<br />");
 
-    const safeName =
-      escapeHtml(cleanName);
+    // SEND EMAIL
 
-    const safeEmail =
-      escapeHtml(cleanEmail);
-
-    const safeMessage =
-      escapeHtml(cleanMessage)
-        .replaceAll(
-          "\n",
-          "<br />",
-        );
-
-    /*
-    |--------------------------------------------------------------------------
-    | SEND EMAIL
-    |--------------------------------------------------------------------------
-    */
-
-    const {
-      data,
-      error,
-    } = await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from: fromEmail,
-
       to: [toEmail],
-
       replyTo: cleanEmail,
-
-      subject:
-        `Portfolio enquiry from ${cleanName}`,
-
+      subject: `Portfolio enquiry from ${cleanName}`,
       text: [
         "New portfolio enquiry",
         "",
@@ -414,34 +329,25 @@ export default async function handler(
     });
 
     if (error) {
-      console.error(
-        "Resend contact error:",
-        error,
-      );
+      console.error("Resend contact error:", error);
 
       return response.status(500).json({
         success: false,
-        message:
-          "Unable to send your message right now.",
+        message: "Unable to send your message right now.",
       });
     }
 
     return response.status(200).json({
       success: true,
-      message:
-        "Message sent successfully. I'll get back to you soon.",
+      message: "Message sent successfully. I'll get back to you soon.",
       id: data?.id ?? null,
     });
   } catch (error) {
-    console.error(
-      "Contact API error:",
-      error,
-    );
+    console.error("Contact API error:", error);
 
     return response.status(500).json({
       success: false,
-      message:
-        "Unable to send your message right now.",
+      message: "Unable to send your message right now.",
     });
   }
 }
