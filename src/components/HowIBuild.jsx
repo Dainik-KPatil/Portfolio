@@ -1,576 +1,860 @@
+import {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+
 import { motion } from "framer-motion";
 
 import {
-  ArrowRight,
-  Braces,
   CheckCircle2,
-  Code2,
   Database,
+  FileCheck2,
   GitBranch,
   Layers3,
-  Network,
-  ServerCog,
+  RefreshCw,
+  ScanSearch,
+  ShieldCheck,
   TerminalSquare,
+  Users,
 } from "lucide-react";
 
-const architectureSteps = [
+/* =========================================================
+   FUNCTIONAL PHASES
+
+   These describe WHAT the system is doing,
+   rather than naming technologies.
+========================================================= */
+
+const phases = [
   {
     number: "01",
-    title: "Client",
-    icon: Network,
+    title: "Validate the Input",
+    short: "Confirm the request before processing begins.",
+    description:
+      "Check the uploaded attendance file and selected month before allowing the workflow to continue.",
+    icon: FileCheck2,
   },
   {
     number: "02",
-    title: "Route",
-    icon: GitBranch,
-  },
-  {
-    number: "03",
-    title: "Controller",
-    icon: ServerCog,
-  },
-  {
-    number: "04",
-    title: "Validation",
-    icon: CheckCircle2,
-  },
-  {
-    number: "05",
-    title: "Business Logic",
+    title: "Normalise the Data",
+    short: "Convert different input formats into one usable structure.",
+    description:
+      "Read CSV, TXT or DAT input, normalise encoding and organise punch records employee-wise and date-wise.",
     icon: Layers3,
   },
   {
+    number: "03",
+    title: "Resolve Employee Context",
+    short: "Identify who the incoming attendance belongs to.",
+    description:
+      "Match biometric records against valid employees and retrieve the employee context required by later calculations.",
+    icon: Users,
+  },
+  {
+    number: "04",
+    title: "Load Work Rules",
+    short: "Build the rule context before calculating attendance.",
+    description:
+      "Resolve shift timings, grace periods, holidays, weekly-off rules and approved flexible-work requests.",
+    icon: ScanSearch,
+  },
+  {
+    number: "05",
+    title: "Evaluate Attendance",
+    short: "Convert raw punches into meaningful daily status.",
+    description:
+      "Compare in/out punches against defined thresholds to identify presence, half days, late arrivals, early exits and missing punches.",
+    icon: GitBranch,
+  },
+  {
     number: "06",
-    title: "Eloquent",
-    icon: Braces,
+    title: "Apply Exceptions",
+    short: "Business rules can override the basic calculation.",
+    description:
+      "Apply holidays, weekly offs, flexible-work approvals and related exceptions after the base attendance decision.",
+    icon: ShieldCheck,
   },
   {
     number: "07",
-    title: "MySQL",
-    icon: Database,
+    title: "Process Connected Rules",
+    short: "Evaluate how surrounding days affect the final result.",
+    description:
+      "Run connected calculations such as sandwich-leave handling and recalculate affected attendance totals.",
+    icon: RefreshCw,
   },
   {
     number: "08",
-    title: "Response",
-    icon: ArrowRight,
+    title: "Build Final Outcome",
+    short: "Convert daily processing into usable business data.",
+    description:
+      "Prepare attendance summaries, payable-day values and the information needed by downstream salary processing.",
+    icon: Database,
+  },
+  {
+    number: "09",
+    title: "Persist & Continue",
+    short: "Save safely and trigger the next connected workflow.",
+    description:
+      "Persist logs and summaries, run dependent calculations and capture errors without losing visibility into the process.",
+    icon: CheckCircle2,
   },
 ];
 
-const journeySteps = [
+/* =========================================================
+   CODE-LIKE FLOW
+
+   This is intentionally representative rather than displaying
+   the entire controller.
+
+   phase determines which LEFT tile is highlighted.
+========================================================= */
+
+const codeGroups = [
   {
-    year: "EARLY",
-    title: "Python / Django",
-    description:
-      "Backend fundamentals, APIs, database-driven applications and application architecture.",
+    phase: 0,
+    label: "REQUEST VALIDATION",
+    lines: [
+      "public function import(Request $request)",
+      "{",
+      "    validateAttendanceRequest($request);",
+      "    resolveAttendanceMonth($request);",
+      "    verifyUploadedFile();",
+      "",
+    ],
   },
+
   {
-    year: "FOUNDATION",
-    title: "Backend Thinking",
-    description:
-      "Understanding request flow, data models, authentication and reusable application logic.",
+    phase: 1,
+    label: "INPUT NORMALISATION",
+    lines: [
+      "    $content = readUploadedAttendance();",
+      "    $content = normaliseEncoding($content);",
+      "    $delimiter = resolveFileDelimiter();",
+      "",
+      "    foreach ($rows as $row) {",
+      "        parseEmployeeCode($row);",
+      "        parsePunchTime($row);",
+      "        groupPunchesByEmployeeAndDate();",
+      "    }",
+      "",
+    ],
   },
+
   {
-    year: "CURRENT",
-    title: "PHP / Laravel",
-    description:
-      "Continuous professional development through real business applications and production workflows.",
+    phase: 2,
+    label: "EMPLOYEE CONTEXT",
+    lines: [
+      "    foreach ($recordsByEmployee as $code => $records) {",
+      "        $employee = resolveEmployeeFromBiometric($code);",
+      "",
+      "        if (!$employee) {",
+      "            continue;",
+      "        }",
+      "",
+      "        prepareEmployeeContext($employee);",
+      "    }",
+      "",
+    ],
   },
+
   {
-    year: "TODAY",
-    title: "Business Systems",
-    description:
-      "Building connected workflows involving data, APIs, roles, processing and operational logic.",
+    phase: 3,
+    label: "WORK RULE CONTEXT",
+    lines: [
+      "    $shift = resolveShift($employee);",
+      "    $holidayMap = resolveBranchHolidays();",
+      "    $weekOffRules = resolveWeeklyOffRules();",
+      "    $flexibleRequests = resolveApprovedAdjustments();",
+      "",
+      "    $thresholds = buildAttendanceThresholds(",
+      "        $shift,",
+      "        $gracePeriod",
+      "    );",
+      "",
+    ],
+  },
+
+  {
+    phase: 4,
+    label: "DAILY ATTENDANCE ENGINE",
+    lines: [
+      "    foreach ($dates as $date) {",
+      "        $punch = resolvePunchForDate($date);",
+      "",
+      "        $status = evaluateInTime($punch);",
+      "        $status = evaluateOutTime($punch, $status);",
+      "        $status = evaluateWorkingHours($punch, $status);",
+      "",
+      "        detectLateArrival();",
+      "        detectEarlyExit();",
+      "        detectHalfDay();",
+      "        detectMissingPunch();",
+      "    }",
+      "",
+    ],
+  },
+
+  {
+    phase: 5,
+    label: "BUSINESS OVERRIDES",
+    lines: [
+      "    if (isHoliday($date)) {",
+      "        markAsHoliday();",
+      "    } elseif (isWeeklyOff($date)) {",
+      "        markAsWeeklyOff();",
+      "    } elseif (hasApprovedAdjustment($date)) {",
+      "        applyApprovedAdjustment();",
+      "    }",
+      "",
+    ],
+  },
+
+  {
+    phase: 6,
+    label: "CONNECTED RULE PROCESSING",
+    lines: [
+      "    foreach ($attendanceCalendar as $day) {",
+      "        if (isHolidayOrWeekOff($day)) {",
+      "            inspectAdjacentAttendance();",
+      "",
+      "            if (bothSidesAreAbsent()) {",
+      "                applySandwichRule();",
+      "            }",
+      "        }",
+      "    }",
+      "",
+    ],
+  },
+
+  {
+    phase: 7,
+    label: "SUMMARY GENERATION",
+    lines: [
+      "    $summary = calculateAttendanceSummary([",
+      "        'present_days'  => $presentDays,",
+      "        'half_days'     => $halfDays,",
+      "        'absent_days'   => $absentDays,",
+      "        'holidays'      => $holidays,",
+      "        'week_offs'     => $weekOffs,",
+      "        'payable_days'  => $payableDays,",
+      "    ]);",
+      "",
+      "    queueSalaryRecalculation($summary);",
+      "",
+    ],
+  },
+
+  {
+    phase: 8,
+    label: "PERSISTENCE & DOWNSTREAM FLOW",
+    lines: [
+      "    saveAttendanceLogs();",
+      "    saveAttendanceSummary();",
+      "",
+      "    foreach ($salaryQueue as $employee) {",
+      "        recalculateSalary($employee);",
+      "        processConnectedDeductions();",
+      "    }",
+      "",
+      "    auditExecutionResult();",
+      "",
+      "    return successfulResponse();",
+      "}",
+    ],
   },
 ];
 
-const philosophySteps = [
-  "Understand the requirement",
-  "Map the data flow",
-  "Design the structure",
-  "Write business logic",
-  "Connect interface and API",
-  "Test and debug",
-  "Deliver the feature",
-];
+/* =========================================================
+   ANIMATION
+========================================================= */
 
-const revealVariants = {
+const reveal = {
   hidden: {
     opacity: 0,
-    y: 26,
-    filter: "blur(7px)",
+    y: 22,
   },
 
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
 
     transition: {
-      duration: 0.58,
+      duration: 0.5,
       ease: [0.22, 1, 0.36, 1],
     },
   },
 };
 
+/* =========================================================
+   COMPONENT
+========================================================= */
+
 function HowIBuild() {
+  const [activePhase, setActivePhase] =
+    useState(0);
+
+  const [paused, setPaused] =
+    useState(false);
+
+  const codeContainerRef =
+    useRef(null);
+
+  const phaseRefs =
+    useRef([]);
+
+  /* =======================================================
+     AUTO ADVANCE
+
+     The code moves through each logical stage.
+  ======================================================= */
+
+  useEffect(() => {
+    if (paused) {
+      return undefined;
+    }
+
+    const timer = window.setInterval(() => {
+      setActivePhase((current) => {
+        return (
+          (current + 1) %
+          phases.length
+        );
+      });
+    }, 2600);
+
+    return () => {
+      window.clearInterval(timer);
+    };
+  }, [paused]);
+
+  /* =======================================================
+     SCROLL CODE TO ACTIVE FUNCTIONAL BLOCK
+  ======================================================= */
+
+  useEffect(() => {
+    const container =
+      codeContainerRef.current;
+
+    const target =
+      phaseRefs.current[activePhase];
+
+    if (!container || !target) {
+      return;
+    }
+
+    const targetTop =
+      target.offsetTop;
+
+    const targetHeight =
+      target.offsetHeight;
+
+    const containerHeight =
+      container.clientHeight;
+
+    const scrollPosition =
+      targetTop -
+      containerHeight / 2 +
+      targetHeight / 2;
+
+    container.scrollTo({
+      top: Math.max(
+        0,
+        scrollPosition,
+      ),
+
+      behavior: "smooth",
+    });
+  }, [activePhase]);
+
+  const currentPhase =
+    phases[activePhase];
+
   return (
     <section
       id="architecture"
       className="section-shell relative overflow-hidden border-t border-border"
       aria-labelledby="architecture-heading"
     >
+      {/* =====================================================
+          BACKGROUND
+      ====================================================== */}
+
       <div
-        className="technical-grid pointer-events-none absolute inset-0 opacity-[0.26]"
+        className="technical-grid pointer-events-none absolute inset-0 opacity-[0.12]"
         aria-hidden="true"
       />
 
+      <div
+        className="pointer-events-none absolute -left-40 top-28 size-[440px] rounded-full bg-accent/[0.035] blur-[150px]"
+        aria-hidden="true"
+      />
+
+      {/* =====================================================
+          SECTION
+      ====================================================== */}
+
       <div className="site-container relative">
+        {/* =================================================
+            HEADER
+        ================================================== */}
+
         <motion.div
-          initial={{
-            opacity: 0,
-            y: 20,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-          }}
+          variants={reveal}
+          initial="hidden"
+          whileInView="visible"
           viewport={{
             once: true,
-            amount: 0.3,
+            amount: 0.2,
           }}
-          transition={{
-            duration: 0.55,
-          }}
-          className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.6fr)] lg:items-end"
+          className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.58fr)] lg:items-end"
         >
           <div>
-            <p className="section-eyebrow">
-              How I Build
-            </p>
+            <div className="flex items-center gap-3">
+              <span className="h-px w-8 bg-accent" />
+
+              <span className="section-eyebrow">
+                How I Build
+              </span>
+            </div>
 
             <h2
               id="architecture-heading"
-              className="section-heading mt-5 max-w-5xl"
+              className="section-heading mt-5 max-w-4xl"
             >
-              THINK IN FLOW.
-              <br />
-
-              <span className="section-heading-muted">
-                BUILD IN LAYERS.
-              </span>
-
+              COMPLEX RULES.
               <br />
 
               <span className="text-gradient-blue">
-                DEBUG WITH CONTEXT.
+                CLEAR EXECUTION.
               </span>
             </h2>
           </div>
 
           <p className="section-copy max-w-xl lg:pb-1">
-            My development process is centred on understanding how data moves,
-            where business rules belong, and how each layer affects the final
-            feature.
+            I break larger business
+            requirements into smaller
+            decisions, define how data
+            should move between them and
+            execute the workflow in a
+            predictable order.
           </p>
         </motion.div>
 
+        {/* =================================================
+            INTERACTIVE EXECUTION VIEW
+        ================================================== */}
+
         <motion.div
-          variants={revealVariants}
+          variants={reveal}
           initial="hidden"
           whileInView="visible"
           viewport={{
             once: true,
-            amount: 0.14,
+            amount: 0.08,
           }}
-          className="mt-14 overflow-hidden rounded-[30px] border border-border bg-surface"
+          className="relative mt-10 overflow-hidden rounded-[26px] border border-border bg-surface/75 backdrop-blur-xl"
         >
-          <div className="flex flex-col gap-5 border-b border-border p-6 sm:p-8 lg:flex-row lg:items-end lg:justify-between lg:p-10">
+          {/* accent */}
+
+          <div
+            className="pointer-events-none absolute left-0 top-0 z-20 h-px w-[68%] bg-gradient-to-r from-accent via-accent/35 to-transparent"
+            aria-hidden="true"
+          />
+
+          {/* =================================================
+              SMALL IDENTITY HEADER
+          ================================================== */}
+
+          <div className="flex flex-col gap-4 border-b border-border px-5 py-4 sm:px-7 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <p className="technical-label">
-                Application Architecture
+              <p className="font-code text-[8px] font-semibold uppercase tracking-[0.18em] text-accent">
+                Business Logic Execution
               </p>
 
-              <h3 className="mt-3 max-w-3xl font-heading text-3xl font-semibold tracking-[-0.04em] text-text-primary sm:text-4xl">
-                What happens behind the screen matters.
+              <h3 className="mt-1.5 font-heading text-xl font-semibold tracking-[-0.03em] text-text-primary sm:text-2xl">
+                From requirement to
+                reliable workflow.
               </h3>
             </div>
 
-            <div className="flex items-center gap-2 font-code text-[9px] uppercase tracking-[0.12em] text-text-muted">
-              <span className="size-2 rounded-full bg-success" />
-              Structured request lifecycle
-            </div>
-          </div>
+            <div className="flex items-center gap-2">
+              <span className="relative flex size-2">
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-success opacity-25" />
 
-          <div className="p-5 sm:p-7 lg:p-9">
-            <div className="relative grid gap-3 md:grid-cols-4 xl:grid-cols-8">
-              <motion.div
-                initial={{
-                  scaleX: 0,
-                }}
-                whileInView={{
-                  scaleX: 1,
-                }}
-                viewport={{
-                  once: true,
-                }}
-                transition={{
-                  duration: 1.2,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                className="absolute left-[5%] right-[5%] top-1/2 hidden h-px origin-left bg-gradient-to-r from-accent/20 via-accent to-cyan/20 xl:block"
-                aria-hidden="true"
-              />
+                <span className="relative inline-flex size-2 rounded-full bg-success" />
+              </span>
 
-              {architectureSteps.map((step, index) => {
-                const Icon = step.icon;
-                const highlight =
-                  index === 4 ||
-                  index === 5 ||
-                  index === 6;
-
-                return (
-                  <motion.div
-                    key={step.title}
-                    initial={{
-                      opacity: 0,
-                      y: 14,
-                      scale: 0.96,
-                    }}
-                    whileInView={{
-                      opacity: 1,
-                      y: 0,
-                      scale: 1,
-                    }}
-                    viewport={{
-                      once: true,
-                    }}
-                    transition={{
-                      duration: 0.35,
-                      delay: index * 0.06,
-                    }}
-                    whileHover={{
-                      y: -5,
-                      scale: 1.015,
-                    }}
-                    className={[
-                      "group relative z-10 min-h-[155px] rounded-2xl border p-4",
-                      highlight
-                        ? "border-accent/25 bg-accent-soft"
-                        : "border-border bg-surface-alt/95",
-                    ].join(" ")}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span
-                        className={[
-                          "font-code text-[8px]",
-                          highlight
-                            ? "text-accent"
-                            : "text-text-muted",
-                        ].join(" ")}
-                      >
-                        {step.number}
-                      </span>
-
-                      <Icon
-                        size={16}
-                        strokeWidth={1.8}
-                        className={
-                          highlight
-                            ? "text-accent"
-                            : "text-text-muted"
-                        }
-                        aria-hidden="true"
-                      />
-                    </div>
-
-                    <p className="mt-8 font-heading text-base font-semibold text-text-primary">
-                      {step.title}
-                    </p>
-                  </motion.div>
-                );
-              })}
-            </div>
-
-            <div className="mt-5 rounded-2xl border border-border bg-background/60 p-4 sm:p-5">
-              <p className="font-code text-[9px] leading-6 text-text-secondary sm:text-[10px]">
-                <span className="text-accent">
-                  request
-                </span>
-
-                {" → "}
-
-                route
-
-                {" → "}
-
-                controller
-
-                {" → "}
-
-                validation
-
-                {" → "}
-
-                <span className="text-cyan">
-                  business logic
-                </span>
-
-                {" → "}
-
-                eloquent
-
-                {" → "}
-
-                mysql
-
-                {" → "}
-
-                <span className="text-success">
-                  response
-                </span>
-              </p>
-            </div>
-          </div>
-        </motion.div>
-
-        <div className="mt-5 grid gap-5 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
-          <motion.div
-            variants={revealVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{
-              once: true,
-              amount: 0.15,
-            }}
-            className="overflow-hidden rounded-[28px] border border-border bg-surface"
-          >
-            <div className="flex items-center justify-between border-b border-border px-6 py-5 sm:px-7">
-              <div>
-                <p className="technical-label">
-                  Career Journey
-                </p>
-
-                <h3 className="mt-2 font-heading text-2xl font-semibold text-text-primary">
-                  From foundation to production.
-                </h3>
-              </div>
-
-              <GitBranch
-                size={19}
-                className="text-cyan"
-                aria-hidden="true"
-              />
-            </div>
-
-            <div className="p-6 sm:p-7">
-              <div className="relative">
-                <motion.div
-                  initial={{
-                    scaleY: 0,
-                  }}
-                  whileInView={{
-                    scaleY: 1,
-                  }}
-                  viewport={{
-                    once: true,
-                  }}
-                  transition={{
-                    duration: 0.9,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                  className="absolute bottom-8 left-[18px] top-8 w-px origin-top bg-gradient-to-b from-accent via-cyan to-border"
-                  aria-hidden="true"
-                />
-
-                <div className="space-y-3">
-                  {journeySteps.map((step, index) => (
-                    <motion.div
-                      key={step.title}
-                      initial={{
-                        opacity: 0,
-                        x: -12,
-                      }}
-                      whileInView={{
-                        opacity: 1,
-                        x: 0,
-                      }}
-                      viewport={{
-                        once: true,
-                      }}
-                      transition={{
-                        duration: 0.35,
-                        delay: index * 0.07,
-                      }}
-                      className="relative grid grid-cols-[38px_minmax(0,1fr)] gap-4"
-                    >
-                      <div
-                        className={[
-                          "relative z-10 flex size-9 items-center justify-center rounded-full border font-code text-[7px]",
-                          index >= 2
-                            ? "border-accent/30 bg-accent-soft text-accent"
-                            : "border-border bg-surface text-text-muted",
-                        ].join(" ")}
-                      >
-                        0{index + 1}
-                      </div>
-
-                      <motion.div
-                        whileHover={{
-                          x: 4,
-                        }}
-                        className="rounded-2xl border border-border bg-surface-alt/50 p-4"
-                      >
-                        <span className="font-code text-[8px] uppercase tracking-[0.12em] text-text-muted">
-                          {step.year}
-                        </span>
-
-                        <h4 className="mt-2 font-heading text-lg font-semibold text-text-primary">
-                          {step.title}
-                        </h4>
-
-                        <p className="mt-2 text-sm leading-6 text-text-secondary">
-                          {step.description}
-                        </p>
-                      </motion.div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            variants={revealVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{
-              once: true,
-              amount: 0.15,
-            }}
-            className="glass-panel overflow-hidden rounded-[28px]"
-          >
-            <div className="flex items-center justify-between border-b border-border px-5 py-4 sm:px-6">
-              <div className="flex items-center gap-2">
-                <span className="size-2 rounded-full bg-[#ff6b6b]" />
-                <span className="size-2 rounded-full bg-warm" />
-                <span className="size-2 rounded-full bg-success" />
-              </div>
-
-              <span className="technical-label">
-                development.philosophy
+              <span className="font-code text-[7px] font-semibold uppercase tracking-[0.14em] text-text-muted">
+                Flow Simulation
               </span>
             </div>
+          </div>
 
-            <div className="grid lg:grid-cols-[minmax(0,1fr)_230px]">
-              <div className="border-b border-border p-5 sm:p-6 lg:border-b-0 lg:border-r">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="technical-label">
-                      Generic Laravel Example
-                    </p>
+          {/* =================================================
+              LEFT FUNCTIONAL FLOW + RIGHT CODE
+          ================================================== */}
 
-                    <h3 className="mt-2 font-heading text-xl font-semibold text-text-primary">
-                      Keep the flow readable.
-                    </h3>
-                  </div>
+          <div className="grid lg:grid-cols-[minmax(300px,0.74fr)_minmax(0,1.26fr)]">
+            {/* =============================================
+                LEFT
+            ============================================== */}
 
-                  <TerminalSquare
-                    size={18}
-                    className="text-accent"
-                    aria-hidden="true"
-                  />
-                </div>
+            <div className="border-b border-border p-5 sm:p-6 lg:border-b-0 lg:border-r lg:p-7">
+              {/* current functionality */}
 
-                <CodePreview />
-              </div>
-
-              <div className="bg-surface-alt/30 p-5 sm:p-6">
-                <p className="technical-label">
-                  My process
+              <div className="mb-5">
+                <p className="font-code text-[7px] font-semibold uppercase tracking-[0.16em] text-text-muted">
+                  Currently Processing
                 </p>
 
-                <div className="mt-5 space-y-2.5">
-                  {philosophySteps.map((item, index) => (
-                    <motion.div
-                      key={item}
-                      initial={{
-                        opacity: 0,
-                        x: 8,
-                      }}
-                      whileInView={{
-                        opacity: 1,
-                        x: 0,
-                      }}
-                      viewport={{
-                        once: true,
-                      }}
-                      transition={{
-                        duration: 0.3,
-                        delay: index * 0.04,
-                      }}
-                      className="flex items-start gap-3"
-                    >
-                      <span
-                        className={[
-                          "mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full border font-code text-[7px]",
-                          index === 3
-                            ? "border-accent/30 bg-accent-soft text-accent"
-                            : "border-border bg-surface text-text-muted",
-                        ].join(" ")}
-                      >
-                        0{index + 1}
-                      </span>
+                <motion.div
+                  key={activePhase}
+                  initial={{
+                    opacity: 0,
+                    y: 7,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  transition={{
+                    duration: 0.25,
+                  }}
+                  className="mt-2"
+                >
+                  <h4 className="font-heading text-xl font-semibold tracking-[-0.025em] text-text-primary">
+                    {currentPhase.title}
+                  </h4>
 
-                      <p className="pt-0.5 text-xs leading-5 text-text-secondary">
-                        {item}
-                      </p>
-                    </motion.div>
-                  ))}
-                </div>
+                  <p className="mt-1.5 max-w-md text-xs leading-5 text-text-secondary sm:text-[13px]">
+                    {
+                      currentPhase.description
+                    }
+                  </p>
+                </motion.div>
+              </div>
+
+              {/* functionality tiles */}
+
+              <div className="space-y-1">
+                {phases.map(
+                  (
+                    phase,
+                    index,
+                  ) => {
+                    const Icon =
+                      phase.icon;
+
+                    const active =
+                      index ===
+                      activePhase;
+
+                    const completed =
+                      index <
+                      activePhase;
+
+                    return (
+                      <button
+                        key={
+                          phase.number
+                        }
+                        type="button"
+                        onClick={() =>
+                          setActivePhase(
+                            index,
+                          )
+                        }
+                        className={[
+                          "group relative grid w-full grid-cols-[28px_28px_minmax(0,1fr)] items-center gap-3 rounded-xl px-2.5 py-2.5 text-left transition-all duration-300",
+                          active
+                            ? "bg-accent-soft"
+                            : "hover:bg-surface-alt/60",
+                        ].join(
+                          " ",
+                        )}
+                      >
+                        {/* number */}
+
+                        <span
+                          className={[
+                            "font-code text-[7px] font-semibold",
+                            active
+                              ? "text-accent"
+                              : completed
+                                ? "text-success"
+                                : "text-text-muted",
+                          ].join(
+                            " ",
+                          )}
+                        >
+                          {
+                            phase.number
+                          }
+                        </span>
+
+                        {/* icon */}
+
+                        <span
+                          className={[
+                            "flex size-7 items-center justify-center rounded-lg border transition-colors duration-300",
+                            active
+                              ? "border-accent/30 bg-accent/10 text-accent"
+                              : "border-border bg-background/40 text-text-muted",
+                          ].join(
+                            " ",
+                          )}
+                        >
+                          <Icon
+                            size={
+                              13
+                            }
+                            strokeWidth={
+                              1.8
+                            }
+                          />
+                        </span>
+
+                        {/* title */}
+
+                        <div className="min-w-0">
+                          <p
+                            className={[
+                              "truncate text-xs font-semibold transition-colors duration-300",
+                              active
+                                ? "text-text-primary"
+                                : "text-text-secondary",
+                            ].join(
+                              " ",
+                            )}
+                          >
+                            {
+                              phase.title
+                            }
+                          </p>
+
+                          {active && (
+                            <motion.p
+                              initial={{
+                                opacity: 0,
+                              }}
+                              animate={{
+                                opacity: 1,
+                              }}
+                              className="mt-0.5 truncate text-[10px] text-text-muted"
+                            >
+                              {
+                                phase.short
+                              }
+                            </motion.p>
+                          )}
+                        </div>
+
+                        {/* active marker */}
+
+                        {active && (
+                          <motion.span
+                            layoutId="active-build-step"
+                            className="absolute bottom-1.5 left-0 top-1.5 w-[2px] rounded-full bg-accent"
+                          />
+                        )}
+                      </button>
+                    );
+                  },
+                )}
               </div>
             </div>
-          </motion.div>
-        </div>
 
-        <motion.div
-          initial={{
-            opacity: 0,
-            y: 18,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-          }}
-          viewport={{
-            once: true,
-          }}
-          transition={{
-            duration: 0.5,
-          }}
-          className="mt-5 overflow-hidden rounded-[28px] border border-accent/20 bg-accent-soft"
-        >
-          <div className="grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
-            <div className="p-6 sm:p-8">
-              <p className="technical-label text-accent">
-                Development Principle
+            {/* =============================================
+                RIGHT — CODE VIEW
+            ============================================== */}
+
+            <div
+              className="relative min-w-0 bg-background/45"
+              onMouseEnter={() =>
+                setPaused(true)
+              }
+              onMouseLeave={() =>
+                setPaused(false)
+              }
+            >
+              {/* editor header */}
+
+              <div className="flex items-center justify-between border-b border-border px-4 py-3 sm:px-5">
+                <div className="flex items-center gap-2">
+                  <span className="size-2 rounded-full bg-[#ff6b6b]" />
+                  <span className="size-2 rounded-full bg-warm" />
+                  <span className="size-2 rounded-full bg-success" />
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <TerminalSquare
+                    size={12}
+                    className="text-accent"
+                  />
+
+                  <span className="font-code text-[7px] uppercase tracking-[0.12em] text-text-muted">
+                    WorkflowEngine
+                  </span>
+                </div>
+              </div>
+
+              {/* code viewport */}
+
+              <div
+                ref={
+                  codeContainerRef
+                }
+                className="h-[520px] overflow-y-auto scroll-smooth px-4 py-5 sm:px-6"
+                style={{
+                  scrollbarWidth:
+                    "thin",
+                }}
+              >
+                <pre className="min-w-[580px] pb-[210px] font-code">
+                  {codeGroups.map(
+                    (
+                      group,
+                      groupIndex,
+                    ) => {
+                      const isActive =
+                        activePhase ===
+                        group.phase;
+
+                      return (
+                        <motion.div
+                          key={
+                            group.label
+                          }
+                          ref={(
+                            element,
+                          ) => {
+                            phaseRefs.current[
+                              group.phase
+                            ] =
+                              element;
+                          }}
+                          animate={{
+                            opacity:
+                              isActive
+                                ? 1
+                                : 0.38,
+
+                            scale:
+                              isActive
+                                ? 1
+                                : 0.995,
+                          }}
+                          transition={{
+                            duration:
+                              0.3,
+                          }}
+                          className={[
+                            "relative mb-5 rounded-xl border px-3 py-3 transition-colors duration-300",
+                            isActive
+                              ? "border-accent/20 bg-accent/[0.035]"
+                              : "border-transparent",
+                          ].join(
+                            " ",
+                          )}
+                        >
+                          {/* phase label */}
+
+                          <div className="mb-2 flex items-center gap-3">
+                            <span
+                              className={[
+                                "font-code text-[7px] font-semibold",
+                                isActive
+                                  ? "text-accent"
+                                  : "text-text-muted",
+                              ].join(
+                                " ",
+                              )}
+                            >
+                              {
+                                phases[
+                                  group
+                                    .phase
+                                ]
+                                  .number
+                              }
+                            </span>
+
+                            <span
+                              className={[
+                                "font-code text-[7px] uppercase tracking-[0.14em]",
+                                isActive
+                                  ? "text-text-secondary"
+                                  : "text-text-muted",
+                              ].join(
+                                " ",
+                              )}
+                            >
+                              {
+                                group.label
+                              }
+                            </span>
+                          </div>
+
+                          {group.lines.map(
+                            (
+                              line,
+                              lineIndex,
+                            ) => (
+                              <CodeLine
+                                key={`${group.phase}-${lineIndex}`}
+                                number={getLineNumber(
+                                  groupIndex,
+                                  lineIndex,
+                                )}
+                                content={
+                                  line
+                                }
+                                active={
+                                  isActive
+                                }
+                              />
+                            ),
+                          )}
+                        </motion.div>
+                      );
+                    },
+                  )}
+                </pre>
+              </div>
+
+              {/* bottom gradient */}
+
+              <div
+                className="pointer-events-none absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-background/95 to-transparent"
+                aria-hidden="true"
+              />
+            </div>
+          </div>
+
+          {/* =================================================
+              SIMPLE PRINCIPLE
+          ================================================== */}
+
+          <div className="border-t border-border bg-background/20 px-5 py-4 sm:px-7">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+              <p className="max-w-3xl text-xs leading-5 text-text-secondary sm:text-[13px]">
+                I do not treat a feature
+                as an isolated screen.
+                I look at the requirement,
+                the data behind it, the
+                rules affecting it and the
+                downstream impact before
+                deciding how the flow
+                should be implemented.
               </p>
 
-              <h3 className="mt-3 max-w-4xl font-heading text-2xl font-semibold leading-[1.15] tracking-[-0.04em] text-text-primary sm:text-3xl lg:text-4xl">
-                A feature is not complete when the code runs.
-                It is complete when the workflow makes sense.
-              </h3>
-            </div>
+              <div className="flex shrink-0 items-center gap-2">
+                <span className="size-1.5 rounded-full bg-accent" />
 
-            <div className="border-t border-accent/15 p-6 lg:border-l lg:border-t-0 lg:p-8">
-              <div className="flex items-center gap-3">
-                <Code2
-                  size={19}
-                  className="text-accent"
-                  aria-hidden="true"
-                />
-
-                <span className="font-code text-[9px] uppercase tracking-[0.13em] text-text-secondary">
-                  Logic → Flow → Delivery
+                <span className="font-code text-[7px] font-semibold uppercase tracking-[0.13em] text-text-muted">
+                  Requirement → Flow →
+                  Decision → Outcome
                 </span>
               </div>
             </div>
@@ -581,159 +865,151 @@ function HowIBuild() {
   );
 }
 
-function CodePreview() {
-  const lines = [
-    {
-      number: "01",
-      content: "public function store(Request $request)",
-      type: "primary",
-    },
-    {
-      number: "02",
-      content: "{",
-      type: "muted",
-    },
-    {
-      number: "03",
-      content: "  $validated = $request->validate([",
-      type: "normal",
-    },
-    {
-      number: "04",
-      content: "    'employee' => 'required',",
-      type: "accent",
-    },
-    {
-      number: "05",
-      content: "    'date' => 'required|date',",
-      type: "accent",
-    },
-    {
-      number: "06",
-      content: "  ]);",
-      type: "normal",
-    },
-    {
-      number: "07",
-      content: "",
-      type: "normal",
-    },
-    {
-      number: "08",
-      content: "  // business logic",
-      type: "comment",
-    },
-    {
-      number: "09",
-      content: "",
-      type: "normal",
-    },
-    {
-      number: "10",
-      content: "  return response()->json([",
-      type: "normal",
-    },
-    {
-      number: "11",
-      content: "    'status' => true,",
-      type: "success",
-    },
-    {
-      number: "12",
-      content: "  ]);",
-      type: "normal",
-    },
-    {
-      number: "13",
-      content: "}",
-      type: "muted",
-    },
-  ];
+/* =========================================================
+   CODE LINE
+========================================================= */
 
+function CodeLine({
+  number,
+  content,
+  active,
+}) {
   return (
-    <motion.div
-      whileHover={{
-        y: -3,
-      }}
-      className="mt-6 overflow-hidden rounded-2xl border border-border bg-background/65"
-    >
-      <div className="flex items-center justify-between border-b border-border px-4 py-3">
-        <div className="flex items-center gap-2">
-          <Braces
-            size={13}
-            className="text-accent"
-            aria-hidden="true"
-          />
+    <div className="grid grid-cols-[34px_minmax(0,1fr)] text-[9px] leading-[1.8] sm:text-[10px]">
+      <span className="select-none text-text-muted/35">
+        {String(number).padStart(
+          2,
+          "0",
+        )}
+      </span>
 
-          <span className="font-code text-[8px] text-text-muted">
-            ExampleController.php
-          </span>
-        </div>
-
-        <span className="font-code text-[7px] uppercase tracking-[0.12em] text-success">
-          PHP
-        </span>
-      </div>
-
-      <div className="overflow-x-auto px-4 py-4">
-        <pre className="min-w-[520px]">
-          {lines.map((line, index) => (
-            <motion.div
-              key={`${line.number}-${line.content}`}
-              initial={{
-                opacity: 0,
-                x: -6,
-              }}
-              whileInView={{
-                opacity: 1,
-                x: 0,
-              }}
-              viewport={{
-                once: true,
-              }}
-              transition={{
-                duration: 0.22,
-                delay: index * 0.025,
-              }}
-              className="grid grid-cols-[30px_minmax(0,1fr)] font-code text-[9px] leading-6"
-            >
-              <span className="select-none text-text-muted/50">
-                {line.number}
-              </span>
-
-              <code className={getCodeColour(line.type)}>
-                {line.content || " "}
-              </code>
-            </motion.div>
-          ))}
-        </pre>
-      </div>
-    </motion.div>
+      <code
+        className={
+          active
+            ? getCodeColour(
+                content,
+              )
+            : "text-text-muted"
+        }
+      >
+        {content || " "}
+      </code>
+    </div>
   );
 }
 
-function getCodeColour(type) {
-  if (type === "primary") {
+/* =========================================================
+   CODE COLOUR
+
+   Only visual syntax hierarchy.
+   No technology callouts.
+========================================================= */
+
+function getCodeColour(content) {
+  const trimmed =
+    content.trim();
+
+  if (
+    trimmed.startsWith(
+      "public function",
+    )
+  ) {
     return "text-cyan";
   }
 
-  if (type === "accent") {
-    return "text-accent";
-  }
-
-  if (type === "success") {
+  if (
+    trimmed.startsWith(
+      "return ",
+    )
+  ) {
     return "text-success";
   }
 
-  if (type === "comment") {
+  if (
+    trimmed.startsWith(
+      "if ",
+    ) ||
+    trimmed.startsWith(
+      "if(",
+    ) ||
+    trimmed.startsWith(
+      "} elseif",
+    ) ||
+    trimmed.startsWith(
+      "foreach",
+    )
+  ) {
+    return "text-accent";
+  }
+
+  if (
+    trimmed.startsWith(
+      "$",
+    )
+  ) {
+    return "text-text-primary";
+  }
+
+  if (
+    trimmed.includes(
+      "validate",
+    ) ||
+    trimmed.includes(
+      "evaluate",
+    ) ||
+    trimmed.includes(
+      "resolve",
+    ) ||
+    trimmed.includes(
+      "calculate",
+    ) ||
+    trimmed.includes(
+      "apply",
+    ) ||
+    trimmed.includes(
+      "save",
+    ) ||
+    trimmed.includes(
+      "recalculate",
+    )
+  ) {
+    return "text-text-primary";
+  }
+
+  if (
+    trimmed === "{" ||
+    trimmed === "}" ||
+    trimmed === ""
+  ) {
     return "text-text-muted";
   }
 
-  if (type === "muted") {
-    return "text-text-secondary";
+  return "text-text-secondary";
+}
+
+/* =========================================================
+   DISPLAY LINE NUMBER
+
+   Gives continuous-looking editor line numbers.
+========================================================= */
+
+function getLineNumber(
+  groupIndex,
+  lineIndex,
+) {
+  let count = 1;
+
+  for (
+    let index = 0;
+    index < groupIndex;
+    index++
+  ) {
+    count +=
+      codeGroups[index].lines
+        .length;
   }
 
-  return "text-text-primary";
+  return count + lineIndex;
 }
 
 export default HowIBuild;

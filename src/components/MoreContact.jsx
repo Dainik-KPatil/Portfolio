@@ -311,9 +311,9 @@ function MoreContact() {
                 backgroundImage: `
                   linear-gradient(
                     135deg,
-                    rgba(8, 9, 13, 0.60) 0%,
-                    rgba(8, 9, 13, 0.82) 52%,
-                    rgba(8, 9, 13, 0.96) 100%
+                    rgba(8, 9, 13, 0.28) 0%,
+                    rgba(8, 9, 13, 0.48) 52%,
+                    rgba(8, 9, 13, 0.72) 100%
                   ),
                   url(${contactBg})
                 `,
@@ -348,7 +348,7 @@ function MoreContact() {
 
               <div className="flex items-start justify-between gap-5">
                 <div>
-                  <span className="font-code text-[8px] font-semibold uppercase tracking-[0.2em] text-accent">
+                  <span className="font-code text-[8px] font-semibold uppercase tracking-[0.2em] text-white">
                     Available Channels
                   </span>
 
